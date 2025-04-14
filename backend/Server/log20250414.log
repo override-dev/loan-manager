@@ -82,3 +82,11 @@
 2025-04-14 15:31:36.842 +09:00 [INF] Swagger Spec export successful!
 2025-04-14 15:31:37.864 +09:00 [INF] Api Client generation successful!
 2025-04-14 15:31:37.865 +09:00 [INF] Application is shutting down...
+2025-04-14 15:32:11.738 +09:00 [INF] No validators found in the system!
+2025-04-14 15:32:11.772 +09:00 [INF] No action descriptors found. This may indicate an incorrectly configured application or missing application parts. To learn more, visit https://aka.ms/aspnet/mvc/app-parts
+2025-04-14 15:32:11.816 +09:00 [INF] Registered 1 endpoints in 252 milliseconds.
+2025-04-14 15:32:11.955 +09:00 [INF] Now listening on: https://localhost:50792
+2025-04-14 15:32:11.960 +09:00 [INF] Now listening on: http://localhost:50793
+2025-04-14 15:32:11.976 +09:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-04-14 15:32:11.976 +09:00 [INF] Hosting environment: Development
+2025-04-14 15:32:11.976 +09:00 [INF] Content root path: D:\Repos\loan-manager\backend\Server
