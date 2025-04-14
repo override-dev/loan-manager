@@ -1,36 +1,33 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Subscription } from "rxjs";
 import { stepRegistry } from "~/helpers/stepRegistry";
 import { ParentViewModel } from "~/viewModels/parentViewModel";
 
 
 const ParentView = () => {
-  // Crear una única instancia del ParentViewModel
   const parentViewModelRef = useRef<ParentViewModel | null>(null);
   if (!parentViewModelRef.current) {
     parentViewModelRef.current = new ParentViewModel();
   }
   const parentViewModel = parentViewModelRef.current;
 
-  // Estado local para el paso actual
   const [currentStep, setCurrentStep] = useState(0);
 
   let subscription: Subscription | null = null;
 
   useEffect(() => {
-    // Suscribirse al observable del ParentViewModel para obtener el paso actual
     subscription = parentViewModel.currentStep$.subscribe((step) => {
       setCurrentStep(step);
     });
 
     return () => {
       if (subscription) {
-        subscription.unsubscribe(); // Limpiar la suscripción al desmontar el componente
+        subscription.unsubscribe();
       }
     };
   }, []);
 
-  // Obtener la vista y el ViewModel correspondientes al paso actual
+
   const currentEntry = Object.values(stepRegistry)[currentStep];
   const CurrentComponent = currentEntry.component;
   const currentViewModel = parentViewModel.getViewModel(currentStep);
@@ -46,7 +43,7 @@ const ParentView = () => {
           <div className="card-body">
             <h1 className="text-2xl font-bold mb-6">Loan Application Wizard</h1>
 
-            {/* Barra de progreso */}
+          
             <ul className="steps steps-horizontal w-full mb-8">
               {[0, 1, 2].map((step) => (
                 <li
@@ -58,10 +55,10 @@ const ParentView = () => {
               ))}
             </ul>
 
-            {/* Contenido del paso actual */}
+           
             <CurrentComponent viewModel={currentViewModel} />
 
-            {/* Botones de navegación */}
+       
             <div className="flex justify-between mt-6">
               {currentStep > 0 && (
                 <button
