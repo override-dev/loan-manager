@@ -275,49 +275,6 @@ export default function HomePage() {
               label="Overview"
               isExpanded={isExpanded || isMobile}
             />
-            <NavItem
-              to={APP_ROUTES.HOME.FUNNELS.LIST}
-              icon={<FolderKanban size={20} />}
-              label="Funnels"
-              isExpanded={isExpanded || isMobile}
-            />
-
-            {/* Analytics Section */}
-            <SectionHeader label="Analytics" isExpanded={isExpanded || isMobile} />
-            <NavItem
-              to={APP_ROUTES.HOME.SELLER_PERFORMANCE}
-              icon={<ChartAreaIcon size={20} />}
-              label="Seller Performance"
-              isExpanded={isExpanded || isMobile}
-            />
-            <NavItem
-              to={APP_ROUTES.HOME.FUNNEL_PERFORMANCE}
-              icon={<ChartBarIcon size={20} />}
-              label="Funnel Performance"
-              isExpanded={isExpanded || isMobile}
-            />
-
-            <NavItem
-              to={APP_ROUTES.HOME.CUSTOMER_WORKLOAD}
-              icon={<ChartColumnBigIcon size={20} />}
-              label="Customer Workload"
-              isExpanded={isExpanded || isMobile}
-            />
-
-            {/* Administration Section */}
-            <SectionHeader label="Admin" isExpanded={isExpanded || isMobile} />
-            <NavItem
-              to={APP_ROUTES.HOME.USER_MANAGEMENT}
-              icon={<User size={20} />}
-              label="User Management"
-              isExpanded={isExpanded || isMobile}
-            />
-            <NavItem
-              to={APP_ROUTES.HOME.SETTINGS}
-              icon={<Settings size={20} />}
-              label="Settings"
-              isExpanded={isExpanded || isMobile}
-            />
           </div>
 
           {/* Footer Section - only show on desktop or when mobile sidebar is open */}
