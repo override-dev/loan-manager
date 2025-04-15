@@ -1,6 +1,6 @@
 import { useEffect, useState, type FC } from "react";
-import { Subscription } from "rxjs";
 import type { IStepViewModel } from "~/interfaces/IStepViewModel";
+import type { IValidationError } from "~/interfaces/IValidationError";
 import { PersonalInformation } from "~/models/perfonalInformation";
 
 interface PersonalInformationViewProps {
@@ -9,32 +9,59 @@ interface PersonalInformationViewProps {
 
 const PersonalInformationView: FC<PersonalInformationViewProps> = ({ viewModel }) => {
   const [personalInfo, setPersonalInfo] = useState<PersonalInformation>(new PersonalInformation());
-
-  let subscription: Subscription | null = null;
+  const [errors, setErrors] = useState<IValidationError[]>([]);
 
   useEffect(() => {
-    subscription = viewModel.data$.subscribe((info) => {
+    console.log("Setting up subscriptions");
+    
+    // Subscribe to data changes
+    const dataSubscription = viewModel.data$.subscribe((info) => {
+      console.log("Data updated from observable:", info);
       setPersonalInfo(info);
     });
+    
+    // Subscribe to validation errors
+    const errorsSubscription = viewModel.errors$.subscribe((validationErrors) => {
+      console.log("Errors received from observable:", validationErrors);
+      setErrors(validationErrors);
+    });
+
+    // Force an initial validation
+    if (typeof viewModel.validate === 'function') {
+      console.log("Calling initial validation");
+      viewModel.validate();
+    }
 
     return () => {
-      if (subscription) {
-        subscription.unsubscribe();
-      }
+      console.log("Cleaning up subscriptions");
+      dataSubscription.unsubscribe();
+      errorsSubscription.unsubscribe();
     };
   }, [viewModel]);
 
+  // Helper function to get error for a specific field
+  const getFieldError = (fieldName: string): string | null => {
+    console.log(`Checking errors for ${fieldName}:`, errors);
+    const error = errors.find(e => e.field === fieldName);
+    return error ? error.message : null;
+  };
+
   const handleFullNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log("Updating fullName:", e.target.value);
     viewModel.updateData({ fullName: e.target.value });
   };
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log("Updating email:", e.target.value);
     viewModel.updateData({ email: e.target.value });
   };
 
   const handleDateOfBirthChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log("Updating dateOfBirth:", e.target.value);
     viewModel.updateData({ dateOfBirth: e.target.value });
   };
+
+  console.log("Rendering with errors:", errors);
 
   return (
     <div className="space-y-4">
@@ -45,8 +72,11 @@ const PersonalInformationView: FC<PersonalInformationViewProps> = ({ viewModel }
           placeholder="Full Name"
           value={personalInfo.fullName}
           onChange={handleFullNameChange}
-          className="input input-bordered w-full"
+          className={`input input-bordered w-full ${getFieldError('fullName') ? 'border-red-500' : ''}`}
         />
+        {getFieldError('fullName') && (
+          <div className="text-red-500 text-sm mt-1">{getFieldError('fullName')}</div>
+        )}
       </div>
       <div className="form-control">
         <input
@@ -54,8 +84,11 @@ const PersonalInformationView: FC<PersonalInformationViewProps> = ({ viewModel }
           placeholder="Email"
           value={personalInfo.email}
           onChange={handleEmailChange}
-          className="input input-bordered w-full"
+          className={`input input-bordered w-full ${getFieldError('email') ? 'border-red-500' : ''}`}
         />
+        {getFieldError('email') && (
+          <div className="text-red-500 text-sm mt-1">{getFieldError('email')}</div>
+        )}
       </div>
       <div className="form-control">
         <input
@@ -63,9 +96,13 @@ const PersonalInformationView: FC<PersonalInformationViewProps> = ({ viewModel }
           placeholder="Date of Birth"
           value={personalInfo.dateOfBirth}
           onChange={handleDateOfBirthChange}
-          className="input input-bordered w-full"
+          className={`input input-bordered w-full ${getFieldError('dateOfBirth') ? 'border-red-500' : ''}`}
         />
+        {getFieldError('dateOfBirth') && (
+          <div className="text-red-500 text-sm mt-1">{getFieldError('dateOfBirth')}</div>
+        )}
       </div>
+      
     </div>
   );
 };

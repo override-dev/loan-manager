@@ -18,7 +18,7 @@ export const stepRegistry: StepRegistry = {
     viewModelClass: PersonalInformationViewModel,
     component: PersonalInformationView,
   },
-  loanDetails: {
+   loanDetails: {
     viewModelClass: LoanDetailsViewModel,
     component: LoanDetailsView,
   },
