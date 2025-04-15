@@ -1,29 +1,20 @@
 import React, { useState, useEffect, useRef } from "react";
 import {
   LayoutDashboard,
-  FolderKanban,
   Menu,
   LogOut,
   ChevronLeft,
   ChevronRight,
   Palette,
   X,
-  User,
-  ChartAreaIcon,
-  ChartBarIcon,
-  Settings,
-  ChartArea,
-  ChartColumnBigIcon,
 } from "lucide-react";
 import {
   Link,
   useLocation,
   useMatch,
   useNavigate,
-  redirect,
   type LoaderFunctionArgs,
   Outlet,
-  useLoaderData,
   Form
 } from "react-router";
 import APP_ROUTES from "~/utils/appRoutes";
@@ -35,7 +26,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return {}
 }
 
-// Tipos para los componentes
+
 type NavItemProps = {
   to: string;
   icon: React.ReactNode;
@@ -80,7 +71,6 @@ const NavItem: React.FC<NavItemProps> = ({ to, icon, label, isExpanded }) => {
   );
 };
 
-// Componente de la página principal que contiene AppLayout
 export default function HomePage() {
 
 
