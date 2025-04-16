@@ -6,23 +6,24 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="FastEndpoints" Version="6.0.0" />
-    <PackageReference Include="FastEndpoints.ClientGen.Kiota" Version="6.0.0" />
-    <PackageReference Include="FastEndpoints.Swagger" Version="6.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.4" />
-    <PackageReference Include="NSwag.AspNetCore" Version="14.3.0" />
-    <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.11.2" />
-    <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.11.2" />
-    <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.11.1" />
-    <PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.11.1" />
-    <PackageReference Include="OpenTelemetry.Instrumentation.Runtime" Version="1.11.1" />
-    <PackageReference Include="Scalar.AspNetCore" Version="2.1.13" />
-    <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
-    <PackageReference Include="Serilog.Sinks.OpenTelemetry" Version="4.1.1" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="FastEndpoints" Version="5.35.0" />
+		<PackageReference Include="FastEndpoints.ClientGen.Kiota" Version="5.35.0" />
+		<PackageReference Include="FastEndpoints.Swagger" Version="5.35.0" />
+		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.4" />
+		<PackageReference Include="NSwag.AspNetCore" Version="14.3.0" />
+		<PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.11.2" />
+		<PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.11.2" />
+		<PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.11.1" />
+		<PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.11.1" />
+		<PackageReference Include="OpenTelemetry.Instrumentation.Runtime" Version="1.11.1" />
+		<PackageReference Include="Scalar.AspNetCore" Version="2.1.11" />
+		<PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
+		<PackageReference Include="Serilog.Sinks.OpenTelemetry" Version="4.1.1" />
+	</ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Modules\Products\Server.Products.Module\Server.Products.Module.csproj" />
     <ProjectReference Include="..\Server.Module.Framework\Server.Module.Framework.csproj" />
   </ItemGroup>
 

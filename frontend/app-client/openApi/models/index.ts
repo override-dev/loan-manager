@@ -7,11 +7,57 @@ import { type DateOnly, type Parsable, type ParseNode, type SerializationWriter 
 /**
  * Creates a new instance of the appropriate class based on discriminator value
  * @param parseNode The parse node to use to read the discriminator value and create the object
+ * @returns {ServerProductsEndPointsProductsCreateCreateProductsRequest}
+ */
+// @ts-ignore
+export function createServerProductsEndPointsProductsCreateCreateProductsRequestFromDiscriminatorValue(parseNode: ParseNode | undefined) : ((instance?: Parsable) => Record<string, (node: ParseNode) => void>) {
+    return deserializeIntoServerProductsEndPointsProductsCreateCreateProductsRequest;
+}
+/**
+ * Creates a new instance of the appropriate class based on discriminator value
+ * @param parseNode The parse node to use to read the discriminator value and create the object
+ * @returns {ServerProductsEndPointsProductsCreateCreateProductsResponse}
+ */
+// @ts-ignore
+export function createServerProductsEndPointsProductsCreateCreateProductsResponseFromDiscriminatorValue(parseNode: ParseNode | undefined) : ((instance?: Parsable) => Record<string, (node: ParseNode) => void>) {
+    return deserializeIntoServerProductsEndPointsProductsCreateCreateProductsResponse;
+}
+/**
+ * Creates a new instance of the appropriate class based on discriminator value
+ * @param parseNode The parse node to use to read the discriminator value and create the object
  * @returns {ServerWeatherForecast}
  */
 // @ts-ignore
 export function createServerWeatherForecastFromDiscriminatorValue(parseNode: ParseNode | undefined) : ((instance?: Parsable) => Record<string, (node: ParseNode) => void>) {
     return deserializeIntoServerWeatherForecast;
+}
+/**
+ * The deserialization information for the current model
+ * @returns {Record<string, (node: ParseNode) => void>}
+ */
+// @ts-ignore
+export function deserializeIntoServerProductsEndPointsProductsCreateCreateProductsRequest(serverProductsEndPointsProductsCreateCreateProductsRequest: Partial<ServerProductsEndPointsProductsCreateCreateProductsRequest> | undefined = {}) : Record<string, (node: ParseNode) => void> {
+    return {
+        "description": n => { serverProductsEndPointsProductsCreateCreateProductsRequest.description = n.getStringValue(); },
+        "name": n => { serverProductsEndPointsProductsCreateCreateProductsRequest.name = n.getStringValue(); },
+        "price": n => { serverProductsEndPointsProductsCreateCreateProductsRequest.price = n.getNumberValue(); },
+        "stockQuantity": n => { serverProductsEndPointsProductsCreateCreateProductsRequest.stockQuantity = n.getNumberValue(); },
+    }
+}
+/**
+ * The deserialization information for the current model
+ * @returns {Record<string, (node: ParseNode) => void>}
+ */
+// @ts-ignore
+export function deserializeIntoServerProductsEndPointsProductsCreateCreateProductsResponse(serverProductsEndPointsProductsCreateCreateProductsResponse: Partial<ServerProductsEndPointsProductsCreateCreateProductsResponse> | undefined = {}) : Record<string, (node: ParseNode) => void> {
+    return {
+        "createdAt": n => { serverProductsEndPointsProductsCreateCreateProductsResponse.createdAt = n.getDateValue(); },
+        "description": n => { serverProductsEndPointsProductsCreateCreateProductsResponse.description = n.getStringValue(); },
+        "id": n => { serverProductsEndPointsProductsCreateCreateProductsResponse.id = n.getStringValue(); },
+        "name": n => { serverProductsEndPointsProductsCreateCreateProductsResponse.name = n.getStringValue(); },
+        "price": n => { serverProductsEndPointsProductsCreateCreateProductsResponse.price = n.getNumberValue(); },
+        "stockQuantity": n => { serverProductsEndPointsProductsCreateCreateProductsResponse.stockQuantity = n.getNumberValue(); },
+    }
 }
 /**
  * The deserialization information for the current model
@@ -31,6 +77,34 @@ export function deserializeIntoServerWeatherForecast(serverWeatherForecast: Part
  * @param writer Serialization writer to use to serialize this model
  */
 // @ts-ignore
+export function serializeServerProductsEndPointsProductsCreateCreateProductsRequest(writer: SerializationWriter, serverProductsEndPointsProductsCreateCreateProductsRequest: Partial<ServerProductsEndPointsProductsCreateCreateProductsRequest> | undefined | null = {}) : void {
+    if (serverProductsEndPointsProductsCreateCreateProductsRequest) {
+        writer.writeStringValue("description", serverProductsEndPointsProductsCreateCreateProductsRequest.description);
+        writer.writeStringValue("name", serverProductsEndPointsProductsCreateCreateProductsRequest.name);
+        writer.writeNumberValue("price", serverProductsEndPointsProductsCreateCreateProductsRequest.price);
+        writer.writeNumberValue("stockQuantity", serverProductsEndPointsProductsCreateCreateProductsRequest.stockQuantity);
+    }
+}
+/**
+ * Serializes information the current object
+ * @param writer Serialization writer to use to serialize this model
+ */
+// @ts-ignore
+export function serializeServerProductsEndPointsProductsCreateCreateProductsResponse(writer: SerializationWriter, serverProductsEndPointsProductsCreateCreateProductsResponse: Partial<ServerProductsEndPointsProductsCreateCreateProductsResponse> | undefined | null = {}) : void {
+    if (serverProductsEndPointsProductsCreateCreateProductsResponse) {
+        writer.writeDateValue("createdAt", serverProductsEndPointsProductsCreateCreateProductsResponse.createdAt);
+        writer.writeStringValue("description", serverProductsEndPointsProductsCreateCreateProductsResponse.description);
+        writer.writeStringValue("id", serverProductsEndPointsProductsCreateCreateProductsResponse.id);
+        writer.writeStringValue("name", serverProductsEndPointsProductsCreateCreateProductsResponse.name);
+        writer.writeNumberValue("price", serverProductsEndPointsProductsCreateCreateProductsResponse.price);
+        writer.writeNumberValue("stockQuantity", serverProductsEndPointsProductsCreateCreateProductsResponse.stockQuantity);
+    }
+}
+/**
+ * Serializes information the current object
+ * @param writer Serialization writer to use to serialize this model
+ */
+// @ts-ignore
 export function serializeServerWeatherForecast(writer: SerializationWriter, serverWeatherForecast: Partial<ServerWeatherForecast> | undefined | null = {}) : void {
     if (serverWeatherForecast) {
         writer.writeDateOnlyValue("date", serverWeatherForecast.date);
@@ -38,6 +112,50 @@ export function serializeServerWeatherForecast(writer: SerializationWriter, serv
         writer.writeNumberValue("temperatureC", serverWeatherForecast.temperatureC);
         writer.writeNumberValue("temperatureF", serverWeatherForecast.temperatureF);
     }
+}
+export interface ServerProductsEndPointsProductsCreateCreateProductsRequest extends Parsable {
+    /**
+     * The description property
+     */
+    description?: string | null;
+    /**
+     * The name property
+     */
+    name?: string | null;
+    /**
+     * The price property
+     */
+    price?: number | null;
+    /**
+     * The stockQuantity property
+     */
+    stockQuantity?: number | null;
+}
+export interface ServerProductsEndPointsProductsCreateCreateProductsResponse extends Parsable {
+    /**
+     * The createdAt property
+     */
+    createdAt?: Date | null;
+    /**
+     * The description property
+     */
+    description?: string | null;
+    /**
+     * The id property
+     */
+    id?: string | null;
+    /**
+     * The name property
+     */
+    name?: string | null;
+    /**
+     * The price property
+     */
+    price?: number | null;
+    /**
+     * The stockQuantity property
+     */
+    stockQuantity?: number | null;
 }
 export interface ServerWeatherForecast extends Parsable {
     /**

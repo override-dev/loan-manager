@@ -21,10 +21,31 @@
           "Scalar.AspNetCore": "2.1.11",
           "Serilog.AspNetCore": "9.0.0",
           "Serilog.Sinks.OpenTelemetry": "4.1.1",
-          "Server.Module.Framework": "1.0.0"
+          "Server.Module.Framework": "1.0.0",
+          "Server.Products.Module": "1.0.0"
         },
         "runtime": {
           "Server.dll": {}
+        }
+      },
+      "Ardalis.Result/10.1.0": {
+        "runtime": {
+          "lib/net8.0/Ardalis.Result.dll": {
+            "assemblyVersion": "10.1.0.0",
+            "fileVersion": "10.1.0.0"
+          }
+        }
+      },
+      "Ardalis.Result.FluentValidation/10.1.0": {
+        "dependencies": {
+          "Ardalis.Result": "10.1.0",
+          "FluentValidation": "11.11.0"
+        },
+        "runtime": {
+          "lib/net8.0/Ardalis.Result.FluentValidation.dll": {
+            "assemblyVersion": "10.1.0.0",
+            "fileVersion": "10.1.0.0"
+          }
         }
       },
       "AsyncKeyedLock/7.1.4": {
@@ -922,6 +943,67 @@
             "fileVersion": "1.0.0.0"
           }
         }
+      },
+      "Server.Products.Application/1.0.0": {
+        "dependencies": {
+          "Ardalis.Result": "10.1.0",
+          "FastEndpoints.Messaging.Core": "5.35.0",
+          "Server.Products.Domain": "1.0.0"
+        },
+        "runtime": {
+          "Server.Products.Application.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "Server.Products.Domain/1.0.0": {
+        "runtime": {
+          "Server.Products.Domain.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "Server.Products.EndPoints/1.0.0": {
+        "dependencies": {
+          "Ardalis.Result.FluentValidation": "10.1.0",
+          "FastEndpoints": "5.35.0",
+          "Server.Products.Application": "1.0.0"
+        },
+        "runtime": {
+          "Server.Products.EndPoints.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "Server.Products.Infrastructure/1.0.0": {
+        "dependencies": {
+          "FastEndpoints": "5.35.0",
+          "FastEndpoints.Messaging.Core": "5.35.0",
+          "Server.Products.Application": "1.0.0",
+          "Server.Products.Domain": "1.0.0"
+        },
+        "runtime": {
+          "Server.Products.Infrastructure.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "Server.Products.Module/1.0.0": {
+        "dependencies": {
+          "Server.Module.Framework": "1.0.0",
+          "Server.Products.EndPoints": "1.0.0",
+          "Server.Products.Infrastructure": "1.0.0"
+        },
+        "runtime": {
+          "Server.Products.Module.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
       }
     }
   },
@@ -930,6 +1012,20 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
+    },
+    "Ardalis.Result/10.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-+WgsXh+JRm0d8BZPlBUc5w0+FTda4vbWRa/IF2q4zDoRsU5BXr8w4rTbYEklZIMNgQQZTcNouR/QfBV5I/4XYQ==",
+      "path": "ardalis.result/10.1.0",
+      "hashPath": "ardalis.result.10.1.0.nupkg.sha512"
+    },
+    "Ardalis.Result.FluentValidation/10.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-OXfIq2LVnc8YjvpDqud1gJGVaoqOTznA2iSCFA1Ee0ScocXVvXmORWKiABCe3MfGyTg748V+Z7bdiQEXBCFoSQ==",
+      "path": "ardalis.result.fluentvalidation/10.1.0",
+      "hashPath": "ardalis.result.fluentvalidation.10.1.0.nupkg.sha512"
     },
     "AsyncKeyedLock/7.1.4": {
       "type": "package",
@@ -1513,6 +1609,31 @@
       "hashPath": "yamldotnet.16.3.0.nupkg.sha512"
     },
     "Server.Module.Framework/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Server.Products.Application/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Server.Products.Domain/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Server.Products.EndPoints/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Server.Products.Infrastructure/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Server.Products.Module/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

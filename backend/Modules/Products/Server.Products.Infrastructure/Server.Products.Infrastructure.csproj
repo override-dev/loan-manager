@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+ <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+ <ItemGroup>
+   <PackageReference Include="FastEndpoints" Version="5.35.0" />
+   <PackageReference Include="FastEndpoints.Messaging.Core" Version="5.35.0" />
+ </ItemGroup>
+ <ItemGroup>
+   <ProjectReference Include="..\Server.Products.Application\Server.Products.Application.csproj" />
+   <ProjectReference Include="..\Server.Products.Domain\Server.Products.Domain.csproj" />
+ </ItemGroup>
+
+	<ItemGroup>
+		<InternalsVisibleTo Include="Server.Products.Module" />
+	</ItemGroup>
+</Project>
