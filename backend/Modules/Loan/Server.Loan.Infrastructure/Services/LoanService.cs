@@ -1,11 +1,9 @@
-﻿
-
-using Server.Loan.Domain.Entities;
+﻿using Server.Loan.Domain.Aggregates.Loan;
 using Server.Loan.Domain.Interfaces;
 
 internal class LoanService : ILoanService
 {
-    public async Task<Loan> CreateProductAsync(string name, string description, decimal price, int stockQuantity)
+    public async Task<Loan> CreateLoanAsync(string name, string description, decimal price, int stockQuantity)
     {
         var item = new Loan(Guid.NewGuid(), name, description, price, stockQuantity, DateTime.UtcNow);
 

@@ -9,7 +9,7 @@ namespace Server.Loan.Infrastructure.Integrations
     {
         public override async Task<Result<CreateLoanCommandResponse>> ExecuteAsync(CreateLoanCommand command, CancellationToken ct = default)
         {
-            var product = await productService.CreateProductAsync(
+            var product = await productService.CreateLoanAsync(
                 command.Name,
                 command.Description,
                 command.Price,
