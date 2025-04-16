@@ -8,3 +8,17 @@
 /backend/Server/.vs
 /backend/Server/obj
 /backend/Server.Module.Framework/obj
+/backend/Server/bin/Debug/net9.0
+/backend/Modules/Products/Server.Products.Application/bin/Debug/net9.0
+/backend/Modules/Products/Server.Products.Application/obj
+/backend/Modules/Products/Server.Products.Contracts/bin/Debug/net9.0
+/backend/Modules/Products/Server.Products.Contracts/obj
+/backend/Modules/Products/Server.Products.Domain/bin/Debug/net9.0
+/backend/Modules/Products/Server.Products.Domain/obj/Debug/net9.0
+/backend/Modules/Products/Server.Products.Domain/obj
+/backend/Modules/Products/Server.Products.EndPoints/bin/Debug/net9.0
+/backend/Modules/Products/Server.Products.EndPoints/obj
+/backend/Modules/Products/Server.Products.Infrastructure/bin/Debug/net9.0
+/backend/Modules/Products/Server.Products.Infrastructure/obj
+/backend/Modules/Products/Server.Products.Module/bin/Debug/net9.0
+/backend/Modules/Products/Server.Products.Module/obj
