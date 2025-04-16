@@ -28,58 +28,6 @@
           }
         }
       }
-    },
-    "/products": {
-      "post": {
-        "tags": [
-          "Products"
-        ],
-        "operationId": "ServerProductsEndPointsProductsCreateCreateProductsEndPoint",
-        "requestBody": {
-          "x-name": "CreateProductsRequest",
-          "description": "",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ServerProductsEndPointsProductsCreateCreateProductsRequest"
-              }
-            }
-          },
-          "required": true,
-          "x-position": 1
-        },
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ServerProductsEndPointsProductsCreateCreateProductsResponse"
-                }
-              }
-            }
-          },
-          "201": {
-            "description": "Created",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ServerProductsEndPointsProductsCreateCreateProductsResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "409": {
-            "description": ""
-          }
-        }
-      }
     }
   },
   "components": {
@@ -103,56 +51,6 @@
           "summary": {
             "type": "string",
             "nullable": true
-          }
-        }
-      },
-      "ServerProductsEndPointsProductsCreateCreateProductsResponse": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "guid"
-          },
-          "name": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string",
-            "nullable": true
-          },
-          "price": {
-            "type": "number",
-            "format": "decimal"
-          },
-          "stockQuantity": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          }
-        }
-      },
-      "ServerProductsEndPointsProductsCreateCreateProductsRequest": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string",
-            "nullable": true
-          },
-          "price": {
-            "type": "number",
-            "format": "decimal"
-          },
-          "stockQuantity": {
-            "type": "integer",
-            "format": "int32"
           }
         }
       }

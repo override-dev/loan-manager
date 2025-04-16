@@ -22,10 +22,9 @@
 		<PackageReference Include="Serilog.Sinks.OpenTelemetry" Version="4.1.1" />
 	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Modules\Products\Server.Products.Module\Server.Products.Module.csproj" />
-    <ProjectReference Include="..\Server.Module.Framework\Server.Module.Framework.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\Server.Module.Framework\Server.Module.Framework.csproj" />
+	</ItemGroup>
 
 
 	<Target Name="ClientGen" AfterTargets="Build" Condition="'$(Configuration)'=='Debug'">
