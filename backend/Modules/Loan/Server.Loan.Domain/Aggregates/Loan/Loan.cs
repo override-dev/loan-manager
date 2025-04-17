@@ -101,6 +101,14 @@ internal class Loan
         return Result.Success();
     }
 
+
+    public Result Reset()
+    {
+        LoanStatus = LoanStatus.Pending;
+        _domainEvents.Add(new LoanResetEvent(Id));
+
+        return Result.Success();
+    }
     public void ClearDomainEvents()
     {
         _domainEvents.Clear();

@@ -26,3 +26,7 @@ internal class LoanRejectedEvent (LoanId loanId) : LoanDomainEvent(loanId)
 internal class LoanSubmittedEvent (LoanId loanId) : LoanDomainEvent(loanId)
 {
 }
+
+internal class LoanResetEvent(LoanId loanId) : LoanDomainEvent(loanId)
+{
+}

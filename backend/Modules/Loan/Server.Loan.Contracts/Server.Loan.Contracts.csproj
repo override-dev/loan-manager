@@ -7,11 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Loan\ApproveLoan\" />
-    <Folder Include="Features\Loan\RejectLoan\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Ardalis.Result" Version="10.1.0" />
     <PackageReference Include="FastEndpoints" Version="5.35.0" />
   </ItemGroup>

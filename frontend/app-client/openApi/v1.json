@@ -68,6 +68,26 @@
             "description": "Internal server error"
           }
         }
+      },
+      "get": {
+        "tags": [
+          "Loan"
+        ],
+        "summary": "Get all loans",
+        "description": "Get all loans",
+        "operationId": "ServerLoanEndPointsLoanGetLoansGetloansEndPoint",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServerLoanEndPointsLoanGetLoansGetLoansResponse"
+                }
+              }
+            }
+          }
+        }
       }
     }
   },
@@ -156,6 +176,62 @@
           "dateOfBirth": {
             "type": "string",
             "format": "date-time"
+          }
+        }
+      },
+      "ServerLoanEndPointsLoanGetLoansGetLoansResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "loans": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ServerLoanEndPointsLoanGetLoansLoan"
+            }
+          }
+        }
+      },
+      "ServerLoanEndPointsLoanGetLoansLoan": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "loanAmount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "loanTerm": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "loanPurpose": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "bankAccountNumber": {
+            "type": "string"
+          },
+          "bankAccountType": {
+            "type": "string"
+          },
+          "bankName": {
+            "type": "string"
+          },
+          "fullName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "dateOfBirth": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "loanStatus": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       }
