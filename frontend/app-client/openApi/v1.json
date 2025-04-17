@@ -30,45 +30,6 @@
       }
     },
     "/loan": {
-      "post": {
-        "tags": [
-          "Loan"
-        ],
-        "summary": "Submit a loan application",
-        "description": "Submit a loan application to the system",
-        "operationId": "ServerLoanEndPointsLoanSubmitSubmitLoanEndPoint",
-        "requestBody": {
-          "x-name": "SubmitLoanRequest",
-          "description": "",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ServerLoanEndPointsLoanSubmitSubmitLoanRequest"
-              }
-            }
-          },
-          "required": true,
-          "x-position": 1
-        },
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ServerLoanEndPointsLoanSubmitSubmitLoanResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid request"
-          },
-          "500": {
-            "description": "Internal server error"
-          }
-        }
-      },
       "get": {
         "tags": [
           "Loan"
@@ -112,70 +73,6 @@
           "summary": {
             "type": "string",
             "nullable": true
-          }
-        }
-      },
-      "ServerLoanEndPointsLoanSubmitSubmitLoanResponse": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "loanId": {
-            "type": "string"
-          }
-        }
-      },
-      "ServerLoanEndPointsLoanSubmitSubmitLoanRequest": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "loanAmount": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "loanTerm": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "loanPurpose": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "bankInformation": {
-            "$ref": "#/components/schemas/ServerLoanEndPointsLoanSubmitBankInfo"
-          },
-          "personalInformation": {
-            "$ref": "#/components/schemas/ServerLoanEndPointsLoanSubmitPersonalInfo"
-          }
-        }
-      },
-      "ServerLoanEndPointsLoanSubmitBankInfo": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "bankName": {
-            "type": "string"
-          },
-          "accountType": {
-            "type": "string"
-          },
-          "accountNumber": {
-            "type": "string"
-          }
-        }
-      },
-      "ServerLoanEndPointsLoanSubmitPersonalInfo": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "fullName": {
-            "type": "string"
-          },
-          "email": {
-            "type": "string"
-          },
-          "dateOfBirth": {
-            "type": "string",
-            "format": "date-time"
           }
         }
       },

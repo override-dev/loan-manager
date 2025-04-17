@@ -1,6 +1,4 @@
-﻿using Server.Loan.Domain.Aggregates.Loan.Enums;
-
-namespace Server.Loan.Infrastructure.Persistence;
+﻿namespace Loan.StorageProvider.Models;
 
 internal class LoanEntity
 {
@@ -16,7 +14,7 @@ internal class LoanEntity
 
     public required BankInformationEntity BankInformation { get; set; }
 
-    public LoanStatus LoanStatus { get; set; }
+    public int LoanStatus { get; set; }
 
 }
 

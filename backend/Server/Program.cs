@@ -10,6 +10,7 @@ Log.Logger = new LoggerConfiguration()
     .CreateLogger();
 
 var builder = WebApplication.CreateBuilder(args);
+builder.AddAzureServiceBusClient(connectionName: "messaging");
 builder.Services.AddSerilog(config => config.ReadFrom.Configuration(builder.Configuration));
 builder.Services.AddOpenTelemetryServices(builder.Configuration);
 builder.Services.AddControllers();

@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Server.Loan.EndPoints.Loan.Submit;
+namespace Bff.EndPoints.Loan.Submit;
 
 internal class SubmitLoanRequestValidator:AbstractValidator<SubmitLoanRequest>
 {

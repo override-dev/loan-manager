@@ -2,9 +2,15 @@ using Projects;
 
 var builder = DistributedApplication.CreateBuilder(args);
 
-builder.AddProject<Server>("server")
-    .WithExternalHttpEndpoints();
+var serviceBus = builder.AddAzureServiceBus("messaging")
+    .RunAsEmulator();
 
-builder.AddProject<Projects.Bff>("bff");
+builder.AddProject<Server>("server")
+    .WithExternalHttpEndpoints()
+    .WithReference(serviceBus);
+
+builder.AddProject<Projects.Bff>("bff")
+    .WithExternalHttpEndpoints()
+    .WithReference(serviceBus);
 
 builder.Build().Run();

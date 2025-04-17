@@ -7,7 +7,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Aspire.Azure.Messaging.ServiceBus" Version="9.2.0" />
+    <PackageReference Include="FastEndpoints" Version="5.35.0" />
+    <PackageReference Include="FastEndpoints.Swagger" Version="5.35.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.4" />
+    <PackageReference Include="NSwag.AspNetCore" Version="14.3.0" />
+    <PackageReference Include="Scalar.AspNetCore" Version="2.1.16" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Shared\Loan.StorageProvider.Interfaces\Loan.StorageProvider.Interfaces.csproj" />
+    <ProjectReference Include="..\..\Shared\Loan.StorageProvider.Models\Loan.StorageProvider.Models.csproj" />
+    <ProjectReference Include="..\..\Shared\Loan.StorageProvider\Loan.StorageProvider.csproj" />
   </ItemGroup>
 
 </Project>

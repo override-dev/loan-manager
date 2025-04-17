@@ -1,7 +1,7 @@
-﻿using Microsoft.Extensions.Caching.Memory;
+﻿using Loan.StorageProvider.Models;
+using Microsoft.Extensions.Caching.Memory;
 using Server.Loan.Domain.Aggregates.Loan.Enums;
 using Server.Loan.Infrastructure.Interfaces;
-using Server.Loan.Infrastructure.Persistence;
 
 namespace Server.Loan.Infrastructure.Services;
 

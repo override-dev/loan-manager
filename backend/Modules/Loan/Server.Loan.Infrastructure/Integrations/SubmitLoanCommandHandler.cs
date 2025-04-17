@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using Ardalis.Result;
 using FastEndpoints;
+using Loan.StorageProvider.Models;
 using Server.Loan.Contracts.Features.Loan.Notifications;
 using Server.Loan.Contracts.Features.Loan.SubmitLoan;
 using Server.Loan.Infrastructure.Interfaces;
@@ -62,19 +63,19 @@ internal class SubmitLoanCommandHandler(ILoanRepository loanRepository) : Comman
         // 5.- we save the loan using the repository
         var loan = loanResult.Value;
 
-        var loanEntity = new Persistence.LoanEntity
+        var loanEntity = new LoanEntity
         {
             LoanId = loan.Id.ToString(),
             LoanAmount = loan.LoanAmount,
             LoanTerm = loan.LoanTerm,
             LoanPurpose = loan.LoanPurpose,
-            PersonalInformation = new Persistence.PersonalInformationEntity(loan.PersonalInformation.FullName,
+            PersonalInformation = new PersonalInformationEntity(loan.PersonalInformation.FullName,
                                                                             loan.PersonalInformation.Email,
                                                                             loan.PersonalInformation.DateOfBirth),
-            BankInformation = new Persistence.BankInformationEntity(loan.BankInformation.AccountNumber,
+            BankInformation = new BankInformationEntity(loan.BankInformation.AccountNumber,
                                                                     loan.BankInformation.AccountType,
                                                                     loan.BankInformation.BankName),
-            LoanStatus = loan.LoanStatus
+            LoanStatus = (int)loan.LoanStatus
         };
 
         var createdLoan = await loanRepository.CreateLoanAsync(loanEntity);

@@ -1,13 +1,12 @@
 ﻿using Loan.StorageProvider.Models;
-using Server.Loan.Domain.Aggregates.Loan.Enums;
 
-namespace Server.Loan.Infrastructure.Interfaces;
+namespace Loan.StorageProvider.Interfaces;
 
-internal interface ILoanRepository
+internal interface IStorageProvider
 {
     Task<List<LoanEntity>> GetAllLoansAsync();
     Task<LoanEntity?> GetLoanByIdAsync(string loanId);
     Task<LoanEntity> CreateLoanAsync(LoanEntity loan);
-    Task<bool> UpdateLoanStatusAsync(string loanId, LoanStatus newStatus);
+    Task<bool> UpdateLoanStatusAsync(string loanId, int newStatus);
     Task<bool> SubmitLoanAsync(string loanId);
 }

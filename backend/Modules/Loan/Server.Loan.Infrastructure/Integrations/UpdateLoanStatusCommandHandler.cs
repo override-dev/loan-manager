@@ -64,7 +64,7 @@ internal class UpdateLoanStatusCommandHandler(ILoanRepository loanRepository) : 
             LoanAmount: loanEntity.LoanAmount,
             LoanTerm: loanEntity.LoanTerm,
             LoanPurpose: loanEntity.LoanPurpose,
-            loanStatus: loanEntity.LoanStatus, // we pass the current loan Status
+            loanStatus: (LoanStatus)loanEntity.LoanStatus, // we pass the current loan Status
             personalInformation: personalInformation,
             bankInformation: bankInformation);
 
