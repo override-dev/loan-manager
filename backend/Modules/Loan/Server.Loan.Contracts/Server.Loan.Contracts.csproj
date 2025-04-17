@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Loan\CreateLoan\" />
     <Folder Include="Features\Loan\ApproveLoan\" />
     <Folder Include="Features\Loan\RejectLoan\" />
   </ItemGroup>

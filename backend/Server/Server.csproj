@@ -23,6 +23,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\Modules\Loan\Server.Loan.Module\Server.Loan.Module.csproj" />
 	  <ProjectReference Include="..\Server.Module.Framework\Server.Module.Framework.csproj" />
 	</ItemGroup>
 

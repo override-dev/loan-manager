@@ -7,11 +7,95 @@ import { type DateOnly, type Parsable, type ParseNode, type SerializationWriter 
 /**
  * Creates a new instance of the appropriate class based on discriminator value
  * @param parseNode The parse node to use to read the discriminator value and create the object
+ * @returns {ServerLoanEndPointsLoanSubmitBankInfo}
+ */
+// @ts-ignore
+export function createServerLoanEndPointsLoanSubmitBankInfoFromDiscriminatorValue(parseNode: ParseNode | undefined) : ((instance?: Parsable) => Record<string, (node: ParseNode) => void>) {
+    return deserializeIntoServerLoanEndPointsLoanSubmitBankInfo;
+}
+/**
+ * Creates a new instance of the appropriate class based on discriminator value
+ * @param parseNode The parse node to use to read the discriminator value and create the object
+ * @returns {ServerLoanEndPointsLoanSubmitPersonalInfo}
+ */
+// @ts-ignore
+export function createServerLoanEndPointsLoanSubmitPersonalInfoFromDiscriminatorValue(parseNode: ParseNode | undefined) : ((instance?: Parsable) => Record<string, (node: ParseNode) => void>) {
+    return deserializeIntoServerLoanEndPointsLoanSubmitPersonalInfo;
+}
+/**
+ * Creates a new instance of the appropriate class based on discriminator value
+ * @param parseNode The parse node to use to read the discriminator value and create the object
+ * @returns {ServerLoanEndPointsLoanSubmitSubmitLoanRequest}
+ */
+// @ts-ignore
+export function createServerLoanEndPointsLoanSubmitSubmitLoanRequestFromDiscriminatorValue(parseNode: ParseNode | undefined) : ((instance?: Parsable) => Record<string, (node: ParseNode) => void>) {
+    return deserializeIntoServerLoanEndPointsLoanSubmitSubmitLoanRequest;
+}
+/**
+ * Creates a new instance of the appropriate class based on discriminator value
+ * @param parseNode The parse node to use to read the discriminator value and create the object
+ * @returns {ServerLoanEndPointsLoanSubmitSubmitLoanResponse}
+ */
+// @ts-ignore
+export function createServerLoanEndPointsLoanSubmitSubmitLoanResponseFromDiscriminatorValue(parseNode: ParseNode | undefined) : ((instance?: Parsable) => Record<string, (node: ParseNode) => void>) {
+    return deserializeIntoServerLoanEndPointsLoanSubmitSubmitLoanResponse;
+}
+/**
+ * Creates a new instance of the appropriate class based on discriminator value
+ * @param parseNode The parse node to use to read the discriminator value and create the object
  * @returns {ServerWeatherForecast}
  */
 // @ts-ignore
 export function createServerWeatherForecastFromDiscriminatorValue(parseNode: ParseNode | undefined) : ((instance?: Parsable) => Record<string, (node: ParseNode) => void>) {
     return deserializeIntoServerWeatherForecast;
+}
+/**
+ * The deserialization information for the current model
+ * @returns {Record<string, (node: ParseNode) => void>}
+ */
+// @ts-ignore
+export function deserializeIntoServerLoanEndPointsLoanSubmitBankInfo(serverLoanEndPointsLoanSubmitBankInfo: Partial<ServerLoanEndPointsLoanSubmitBankInfo> | undefined = {}) : Record<string, (node: ParseNode) => void> {
+    return {
+        "accountNumber": n => { serverLoanEndPointsLoanSubmitBankInfo.accountNumber = n.getStringValue(); },
+        "accountType": n => { serverLoanEndPointsLoanSubmitBankInfo.accountType = n.getStringValue(); },
+        "bankName": n => { serverLoanEndPointsLoanSubmitBankInfo.bankName = n.getStringValue(); },
+    }
+}
+/**
+ * The deserialization information for the current model
+ * @returns {Record<string, (node: ParseNode) => void>}
+ */
+// @ts-ignore
+export function deserializeIntoServerLoanEndPointsLoanSubmitPersonalInfo(serverLoanEndPointsLoanSubmitPersonalInfo: Partial<ServerLoanEndPointsLoanSubmitPersonalInfo> | undefined = {}) : Record<string, (node: ParseNode) => void> {
+    return {
+        "dateOfBirth": n => { serverLoanEndPointsLoanSubmitPersonalInfo.dateOfBirth = n.getDateValue(); },
+        "email": n => { serverLoanEndPointsLoanSubmitPersonalInfo.email = n.getStringValue(); },
+        "fullName": n => { serverLoanEndPointsLoanSubmitPersonalInfo.fullName = n.getStringValue(); },
+    }
+}
+/**
+ * The deserialization information for the current model
+ * @returns {Record<string, (node: ParseNode) => void>}
+ */
+// @ts-ignore
+export function deserializeIntoServerLoanEndPointsLoanSubmitSubmitLoanRequest(serverLoanEndPointsLoanSubmitSubmitLoanRequest: Partial<ServerLoanEndPointsLoanSubmitSubmitLoanRequest> | undefined = {}) : Record<string, (node: ParseNode) => void> {
+    return {
+        "bankInformation": n => { serverLoanEndPointsLoanSubmitSubmitLoanRequest.bankInformation = n.getObjectValue<ServerLoanEndPointsLoanSubmitBankInfo>(createServerLoanEndPointsLoanSubmitBankInfoFromDiscriminatorValue); },
+        "loanAmount": n => { serverLoanEndPointsLoanSubmitSubmitLoanRequest.loanAmount = n.getNumberValue(); },
+        "loanPurpose": n => { serverLoanEndPointsLoanSubmitSubmitLoanRequest.loanPurpose = n.getNumberValue(); },
+        "loanTerm": n => { serverLoanEndPointsLoanSubmitSubmitLoanRequest.loanTerm = n.getNumberValue(); },
+        "personalInformation": n => { serverLoanEndPointsLoanSubmitSubmitLoanRequest.personalInformation = n.getObjectValue<ServerLoanEndPointsLoanSubmitPersonalInfo>(createServerLoanEndPointsLoanSubmitPersonalInfoFromDiscriminatorValue); },
+    }
+}
+/**
+ * The deserialization information for the current model
+ * @returns {Record<string, (node: ParseNode) => void>}
+ */
+// @ts-ignore
+export function deserializeIntoServerLoanEndPointsLoanSubmitSubmitLoanResponse(serverLoanEndPointsLoanSubmitSubmitLoanResponse: Partial<ServerLoanEndPointsLoanSubmitSubmitLoanResponse> | undefined = {}) : Record<string, (node: ParseNode) => void> {
+    return {
+        "loanId": n => { serverLoanEndPointsLoanSubmitSubmitLoanResponse.loanId = n.getStringValue(); },
+    }
 }
 /**
  * The deserialization information for the current model
@@ -31,6 +115,54 @@ export function deserializeIntoServerWeatherForecast(serverWeatherForecast: Part
  * @param writer Serialization writer to use to serialize this model
  */
 // @ts-ignore
+export function serializeServerLoanEndPointsLoanSubmitBankInfo(writer: SerializationWriter, serverLoanEndPointsLoanSubmitBankInfo: Partial<ServerLoanEndPointsLoanSubmitBankInfo> | undefined | null = {}) : void {
+    if (serverLoanEndPointsLoanSubmitBankInfo) {
+        writer.writeStringValue("accountNumber", serverLoanEndPointsLoanSubmitBankInfo.accountNumber);
+        writer.writeStringValue("accountType", serverLoanEndPointsLoanSubmitBankInfo.accountType);
+        writer.writeStringValue("bankName", serverLoanEndPointsLoanSubmitBankInfo.bankName);
+    }
+}
+/**
+ * Serializes information the current object
+ * @param writer Serialization writer to use to serialize this model
+ */
+// @ts-ignore
+export function serializeServerLoanEndPointsLoanSubmitPersonalInfo(writer: SerializationWriter, serverLoanEndPointsLoanSubmitPersonalInfo: Partial<ServerLoanEndPointsLoanSubmitPersonalInfo> | undefined | null = {}) : void {
+    if (serverLoanEndPointsLoanSubmitPersonalInfo) {
+        writer.writeDateValue("dateOfBirth", serverLoanEndPointsLoanSubmitPersonalInfo.dateOfBirth);
+        writer.writeStringValue("email", serverLoanEndPointsLoanSubmitPersonalInfo.email);
+        writer.writeStringValue("fullName", serverLoanEndPointsLoanSubmitPersonalInfo.fullName);
+    }
+}
+/**
+ * Serializes information the current object
+ * @param writer Serialization writer to use to serialize this model
+ */
+// @ts-ignore
+export function serializeServerLoanEndPointsLoanSubmitSubmitLoanRequest(writer: SerializationWriter, serverLoanEndPointsLoanSubmitSubmitLoanRequest: Partial<ServerLoanEndPointsLoanSubmitSubmitLoanRequest> | undefined | null = {}) : void {
+    if (serverLoanEndPointsLoanSubmitSubmitLoanRequest) {
+        writer.writeObjectValue<ServerLoanEndPointsLoanSubmitBankInfo>("bankInformation", serverLoanEndPointsLoanSubmitSubmitLoanRequest.bankInformation, serializeServerLoanEndPointsLoanSubmitBankInfo);
+        writer.writeNumberValue("loanAmount", serverLoanEndPointsLoanSubmitSubmitLoanRequest.loanAmount);
+        writer.writeNumberValue("loanPurpose", serverLoanEndPointsLoanSubmitSubmitLoanRequest.loanPurpose);
+        writer.writeNumberValue("loanTerm", serverLoanEndPointsLoanSubmitSubmitLoanRequest.loanTerm);
+        writer.writeObjectValue<ServerLoanEndPointsLoanSubmitPersonalInfo>("personalInformation", serverLoanEndPointsLoanSubmitSubmitLoanRequest.personalInformation, serializeServerLoanEndPointsLoanSubmitPersonalInfo);
+    }
+}
+/**
+ * Serializes information the current object
+ * @param writer Serialization writer to use to serialize this model
+ */
+// @ts-ignore
+export function serializeServerLoanEndPointsLoanSubmitSubmitLoanResponse(writer: SerializationWriter, serverLoanEndPointsLoanSubmitSubmitLoanResponse: Partial<ServerLoanEndPointsLoanSubmitSubmitLoanResponse> | undefined | null = {}) : void {
+    if (serverLoanEndPointsLoanSubmitSubmitLoanResponse) {
+        writer.writeStringValue("loanId", serverLoanEndPointsLoanSubmitSubmitLoanResponse.loanId);
+    }
+}
+/**
+ * Serializes information the current object
+ * @param writer Serialization writer to use to serialize this model
+ */
+// @ts-ignore
 export function serializeServerWeatherForecast(writer: SerializationWriter, serverWeatherForecast: Partial<ServerWeatherForecast> | undefined | null = {}) : void {
     if (serverWeatherForecast) {
         writer.writeDateOnlyValue("date", serverWeatherForecast.date);
@@ -38,6 +170,62 @@ export function serializeServerWeatherForecast(writer: SerializationWriter, serv
         writer.writeNumberValue("temperatureC", serverWeatherForecast.temperatureC);
         writer.writeNumberValue("temperatureF", serverWeatherForecast.temperatureF);
     }
+}
+export interface ServerLoanEndPointsLoanSubmitBankInfo extends Parsable {
+    /**
+     * The accountNumber property
+     */
+    accountNumber?: string | null;
+    /**
+     * The accountType property
+     */
+    accountType?: string | null;
+    /**
+     * The bankName property
+     */
+    bankName?: string | null;
+}
+export interface ServerLoanEndPointsLoanSubmitPersonalInfo extends Parsable {
+    /**
+     * The dateOfBirth property
+     */
+    dateOfBirth?: Date | null;
+    /**
+     * The email property
+     */
+    email?: string | null;
+    /**
+     * The fullName property
+     */
+    fullName?: string | null;
+}
+export interface ServerLoanEndPointsLoanSubmitSubmitLoanRequest extends Parsable {
+    /**
+     * The bankInformation property
+     */
+    bankInformation?: ServerLoanEndPointsLoanSubmitBankInfo | null;
+    /**
+     * The loanAmount property
+     */
+    loanAmount?: number | null;
+    /**
+     * The loanPurpose property
+     */
+    loanPurpose?: number | null;
+    /**
+     * The loanTerm property
+     */
+    loanTerm?: number | null;
+    /**
+     * The personalInformation property
+     */
+    personalInformation?: ServerLoanEndPointsLoanSubmitPersonalInfo | null;
+}
+export interface ServerLoanEndPointsLoanSubmitSubmitLoanResponse extends Parsable {
+    /**
+     * The loanId property
+     */
+    loanId?: string | null;
 }
 export interface ServerWeatherForecast extends Parsable {
     /**

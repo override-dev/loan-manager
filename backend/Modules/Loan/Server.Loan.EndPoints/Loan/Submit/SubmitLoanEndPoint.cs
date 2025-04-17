@@ -8,7 +8,8 @@ internal class SubmitLoanEndPoint:Endpoint<SubmitLoanRequest, SubmitLoanResponse
 {
     public override void Configure()
     {
-        Post();
+        Post("/");
+        Group<LoanGroup>(); 
         AllowAnonymous();
         Summary(s =>
         {
@@ -27,7 +28,7 @@ internal class SubmitLoanEndPoint:Endpoint<SubmitLoanRequest, SubmitLoanResponse
             LoanTerm = req.LoanTerm,
             LoanPurpose = req.LoanPurpose,
             BankInformation = new BankInformationDto(req.BankInformation.AccountNumber, req.BankInformation.AccountType, req.BankInformation.BankName),
-            PersonalInformation = new PersonalInformationDto(req.PersonalInformation.FullName, req.PersonalInformation.Email, req.PersonalInformation.DateOfBirth)
+            PersonalInformation = new PersonalInformationDto(req.PersonalInformation.FullName, req.PersonalInformation.Email, DateOnly.FromDateTime(req.PersonalInformation.DateOfBirth))
         };
 
         var response = await command.ExecuteAsync(ct);
