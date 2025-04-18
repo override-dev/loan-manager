@@ -11,8 +11,6 @@ This repository contains implementation guides and best practices for Domain-Dri
 - [Model-View-ViewModel (MVVM)](#model-view-viewmodel-mvvm)
   - [MVVM with TypeScript and React](#mvvm-with-typescript-and-react)
   - [Parent ViewModels in MVVM with TypeScript and React](#parent-viewmodels-in-mvvm-with-typescript-and-react)
-- [Contributing](#contributing)
-- [License](#license)
 
 ## Introduction
 
