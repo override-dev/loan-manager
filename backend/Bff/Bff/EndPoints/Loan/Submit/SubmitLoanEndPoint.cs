@@ -1,5 +1,4 @@
 ﻿using Bff.Interfaces;
-using Bff.Models;
 using FastEndpoints;
 using Loan.StorageProvider.Interfaces;
 using Loan.StorageProvider.Models;
@@ -43,8 +42,8 @@ internal class SubmitLoanEndPoint(IStorageProvider storageProvider, ILoanPublish
 
 
         //3.- Publish the loan creation event to the message broker
-        var loanCreationRequest = new LoanSubmissionRequest(
-            loanCreationResult.LoanId,
+        var loanCreationRequest = new global::Loan.Shared.Contracts.Commands.SubmitLoanRequest(
+            loanCreationResult.LoanId,// we pass the loan ID from the storage provider
             req.LoanAmount,
             req.LoanTerm,
             req.LoanPurpose,

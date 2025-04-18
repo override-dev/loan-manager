@@ -2,6 +2,7 @@ using Bff.Interfaces;
 using Bff.Services;
 using FastEndpoints;
 using FastEndpoints.Swagger;
+using Loan.StorageProvider;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.AddAzureServiceBusClient(connectionName: "messaging");
 builder.Services.AddControllers();
 builder.Services.AddTransient<ILoanPublisher, LoanPublisher>();
+builder.Services.AddStorageProvider();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
@@ -52,5 +54,6 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+app.UseFastEndpoints();
 
 app.Run();

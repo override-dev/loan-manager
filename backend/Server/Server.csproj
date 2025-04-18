@@ -28,6 +28,10 @@
 	  <ProjectReference Include="..\Server.Module.Framework\Server.Module.Framework.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Services\" />
+	</ItemGroup>
+
 
 	<Target Name="ClientGen" AfterTargets="Build" Condition="'$(Configuration)'=='Debug'">
 		<Exec WorkingDirectory="$(RunWorkingDirectory)" Command="$(RunCommand) --generateclients true" />

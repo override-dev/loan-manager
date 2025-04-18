@@ -1,13 +1,18 @@
-using Projects;
-
 var builder = DistributedApplication.CreateBuilder(args);
 
+// Add Service Bus with emulator and create topic
 var serviceBus = builder.AddAzureServiceBus("messaging")
     .RunAsEmulator();
 
-builder.AddProject<Server>("server")
+// Add topic separately for better readability and control
+//serviceBus.AddServiceBusTopic("loan-notifications");
+serviceBus.AddServiceBusQueue("loan-notifications");
+
+// Add projects with reference to Service Bus
+builder.AddProject<Projects.Server>("server")
     .WithExternalHttpEndpoints()
-    .WithReference(serviceBus);
+    .WithReference(serviceBus)
+    .WaitFor(serviceBus);
 
 builder.AddProject<Projects.Bff>("bff")
     .WithExternalHttpEndpoints()

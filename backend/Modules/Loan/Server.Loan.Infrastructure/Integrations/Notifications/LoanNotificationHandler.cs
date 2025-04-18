@@ -1,11 +1,10 @@
 ﻿using Azure.Messaging.ServiceBus;
 using FastEndpoints;
-using Microsoft.Extensions.DependencyInjection;
 using Server.Loan.Contracts.Features.Loan.Notifications;
 
 namespace Server.Loan.Infrastructure.Integrations.Notifications;
 
-internal class LoanNotificationHandler([FromKeyedServices("messaging")] ServiceBusClient mainBusClient) :IEventHandler<LoanNotification>
+internal class LoanNotificationHandler(ServiceBusClient mainBusClient) :IEventHandler<LoanNotification>
 {
     public async Task HandleAsync(LoanNotification notification, CancellationToken cancellationToken)
     {

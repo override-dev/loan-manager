@@ -1,9 +1,8 @@
-﻿namespace Server.Loan.Infrastructure.Configuration
-{
-    internal class LoanConfiguration
-    {
-        public required string Name { get; set; }
+﻿namespace Server.Loan.Infrastructure.Configuration;
 
-        public string? Description { get; set; }
-    }
+internal class LoanConfiguration
+{
+    public required string Name { get; set; }
+
+    public string? Description { get; set; }
 }

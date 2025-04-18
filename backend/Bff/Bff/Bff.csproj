@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Loan.Shared.Contracts\Loan.Shared.Contracts.csproj" />
     <ProjectReference Include="..\..\Shared\Loan.StorageProvider.Interfaces\Loan.StorageProvider.Interfaces.csproj" />
     <ProjectReference Include="..\..\Shared\Loan.StorageProvider.Models\Loan.StorageProvider.Models.csproj" />
     <ProjectReference Include="..\..\Shared\Loan.StorageProvider\Loan.StorageProvider.csproj" />

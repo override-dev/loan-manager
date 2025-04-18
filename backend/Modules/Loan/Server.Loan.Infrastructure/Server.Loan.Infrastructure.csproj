@@ -14,13 +14,13 @@
    <PackageReference Include="FastEndpoints.Messaging.Core" Version="5.35.0" />
  </ItemGroup>
  <ItemGroup>
+   <ProjectReference Include="..\..\..\Loan.Shared.Contracts\Loan.Shared.Contracts.csproj" />
    <ProjectReference Include="..\..\..\Shared\Loan.StorageProvider.Models\Loan.StorageProvider.Models.csproj" />
    <ProjectReference Include="..\..\..\Shared\Loan.StorageProvider\Loan.StorageProvider.csproj" />
    <ProjectReference Include="..\Server.Loan.Application\Server.Loan.Application.csproj" />
    <ProjectReference Include="..\Server.Loan.Contracts\Server.Loan.Contracts.csproj" />
    <ProjectReference Include="..\Server.Loan.Domain\Server.Loan.Domain.csproj" />
  </ItemGroup>
-
 	<ItemGroup>
 		<InternalsVisibleTo Include="Server.Loan.Module" />
 	</ItemGroup>

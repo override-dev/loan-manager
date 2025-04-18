@@ -4,33 +4,33 @@ using Microsoft.Extensions.DependencyInjection;
 using Server.Loan.Infrastructure;
 using Server.Loan.Infrastructure.Configuration;
 using Server.Module.Framework;
+using Server.Loan.Application;
 
-namespace Server.Loan.Module
+namespace Server.Loan.Module;
+
+public class ModuleInstaller : IModuleInstaller
 {
-    public class ModuleInstaller : IModuleInstaller
+    public string Name => nameof(Loan);
+
+    public void Install(IServiceCollection services, IConfiguration configuration)
     {
-        public string Name => nameof(Loan);
+        var directory = Path.GetDirectoryName(typeof(ModuleInstaller).Assembly.Location);
 
-        public void Install(IServiceCollection services, IConfiguration configuration)
-        {
-            var directory = Path.GetDirectoryName(typeof(ModuleInstaller).Assembly.Location);
+        ArgumentException.ThrowIfNullOrEmpty(directory, nameof(directory));
 
-            ArgumentException.ThrowIfNullOrEmpty(directory, nameof(directory));
+        var currentConfiguration = new ConfigurationBuilder()
+         .SetBasePath(directory)
+         .AddJsonFile("Loan.json", optional: false, reloadOnChange: true)
+         .Build();
 
-            var currentConfiguration = new ConfigurationBuilder()
-             .SetBasePath(directory)
-             .AddJsonFile("Loan.json", optional: false, reloadOnChange: true)
-             .Build();
+        services.Configure<LoanConfiguration>(currentConfiguration.GetSection(nameof(Loan)));
 
-            services.Configure<LoanConfiguration>(currentConfiguration.GetSection(nameof(Loan)));
+        services.AddApplication();
+        services.AddInfrastructure();
+    }
 
-
-            services.AddInfrastructure();
-        }
-
-        public void Use(IApplicationBuilder host, IConfiguration configuration)
-        {
-            throw new NotImplementedException();
-        }
+    public void Use(IApplicationBuilder host, IConfiguration configuration)
+    {
+        throw new NotImplementedException();
     }
 }
