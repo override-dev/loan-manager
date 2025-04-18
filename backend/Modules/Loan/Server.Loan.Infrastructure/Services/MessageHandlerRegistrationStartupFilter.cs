@@ -1,4 +1,4 @@
-﻿using Loan.Shared.Contracts.Commands;
+﻿using Loan.Shared.Contracts.Requests;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,7 +15,7 @@ internal class MessageHandlerRegistrationStartupFilter(
     {
         // Register all message handlers
         registry.RegisterHandler(
-            nameof(SubmitLoanRequest),
+            nameof(LoanSubmissionRequested),
             serviceProvider.GetRequiredService<SubmitLoanRequestHandler>());
 
         // Add more handlers as needed
