@@ -14,7 +14,7 @@ internal class LoanPublisher(ServiceBusClient mainBusClient) : ILoanPublisher
         var envelop = new MessageEnvelope(nameof(LoanSubmissionRequested), commandJson);
         var json = JsonSerializer.Serialize(envelop);
         await mainBusClient
-             .CreateSender("loan-notifications")
+             .CreateSender(Loan.Shared.Contracts.Constants.Topics.LoanQueueName)
              .SendMessageAsync(new ServiceBusMessage(json), cancellationToken);
     }
 }

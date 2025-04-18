@@ -5,7 +5,6 @@ var serviceBus = builder.AddAzureServiceBus("messaging")
     .RunAsEmulator();
 
 // Add topic separately for better readability and control
-//serviceBus.AddServiceBusTopic("loan-notifications");
 serviceBus.AddServiceBusQueue("loan-notifications");
 
 // Add projects with reference to Service Bus
