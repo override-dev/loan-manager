@@ -1,10 +1,7 @@
 ﻿using Ardalis.Result;
 using FastEndpoints;
 
-namespace Server.Loan.Application.Features.Products.CreateProduct;
+namespace Server.Loan.Application.Features.Loan.CreateLoan;
 
 internal record CreateLoanCommand(
-    string Name,
-    string Description,
-    decimal Price,
-    int StockQuantity) : ICommand<Result<CreateLoanCommandResponse>>;
+   string DraftLoanId) : ICommand<Result<CreateLoanCommandResponse>>;

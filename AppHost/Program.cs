@@ -28,4 +28,6 @@ builder.AddProject<Projects.Bff>("bff")
     .WithReference(loanDrafts)
     .WaitFor(loanDrafts);
 
+builder.AddProject<Projects.Server_Dashboard>("server-dashboard");
+
 builder.Build().Run();

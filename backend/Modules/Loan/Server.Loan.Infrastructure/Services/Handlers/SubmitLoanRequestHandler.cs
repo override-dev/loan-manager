@@ -2,8 +2,8 @@
 using FastEndpoints;
 using Loan.Shared.Contracts.Requests;
 using Microsoft.Extensions.Logging;
+using Server.Loan.Application.Features.Loan.CreateLoan;
 using Server.Loan.Application.Interfaces;
-using Server.Loan.Contracts.Features.Loan.SubmitLoan;
 using Server.Loan.Infrastructure.Interfaces;
 
 namespace Server.Loan.Infrastructure.Services.Handlers;
@@ -34,23 +34,14 @@ internal class SubmitLoanRequestHandler(ILogger<SubmitLoanRequestHandler> logger
             return;
         }
 
-        var command = new SubmitLoanCommand
+        var createCommand = new CreateLoanCommand(loanEntity.LoanId);
+        var createLoanResult = await createCommand.ExecuteAsync(cancellationToken);
+
+        if(!createLoanResult.IsSuccess)
         {
-            LoanAmount = loanEntity.LoanAmount,
-            LoanTerm = loanEntity.LoanTerm,
-            LoanPurpose = loanEntity.LoanPurpose,
-            PersonalInformation = new PersonalInformationDto(
-                loanEntity.PersonalInformation.FullName,
-                loanEntity.PersonalInformation.Email, 
-                loanEntity.PersonalInformation.DateOfBirth),
-            BankInformation = new BankInformationDto(
-                loanEntity.BankInformation.BankName,
-                loanEntity.BankInformation.AccountType,
-                loanEntity.BankInformation.AccountNumber),
-        };
-
-        await command.ExecuteAsync(cancellationToken);
-
+            logger.LogError("Failed to create loan with ID {LoanId}", loanSubmission.LoanId);
+            return;
+        }
         // Implement the business logic for processing the loan submission
         // This could include saving to a database, calling other services, etc.
 

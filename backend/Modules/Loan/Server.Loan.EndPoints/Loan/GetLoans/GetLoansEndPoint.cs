@@ -1,6 +1,6 @@
 ﻿using FastEndpoints;
 using FluentValidation.Results;
-using Server.Loan.Contracts.Features.Loan.GetLoan;
+using Server.Loan.Contracts.Features.Loan.GetLoans;
 
 namespace Server.Loan.EndPoints.Loan.GetLoans;
 
