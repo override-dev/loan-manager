@@ -12,9 +12,11 @@
 
 	<ItemGroup>
 		<InternalsVisibleTo Include="Bff" />
+		<InternalsVisibleTo Include="Server.Loan.Infrastructure" />
 	</ItemGroup>
 
 	<ItemGroup>
+	  <PackageReference Include="Aspire.StackExchange.Redis" Version="9.2.0" />
 	  <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.4" />
 	</ItemGroup>
 </Project>

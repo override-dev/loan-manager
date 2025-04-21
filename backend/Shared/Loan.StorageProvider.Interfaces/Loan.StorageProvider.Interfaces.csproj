@@ -12,5 +12,6 @@
 	<ItemGroup>
 		<InternalsVisibleTo Include="Loan.StorageProvider"/>
 		<InternalsVisibleTo Include="Bff"/>
+		<internalsVisibleTo Include="Server.Loan.Infrastructure"/>
 	</ItemGroup>
 </Project>

@@ -9,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.AddAzureServiceBusClient(connectionName: "messaging");
+builder.AddRedisClient(connectionName: "cache");
 builder.Services.AddControllers();
 builder.Services.AddTransient<ILoanPublisher, LoanPublisher>();
 builder.Services.AddStorageProvider();

@@ -7,7 +7,7 @@ internal static class ServiceExtensions
 {
     public static IServiceCollection AddStorageProvider(this IServiceCollection services)
     {
-        services.AddSingleton<IStorageProvider, StorageProvider>();
+        services.AddSingleton<IStorageProvider, RedisStorageProvider>();
         return services;
     }
 }

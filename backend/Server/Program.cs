@@ -11,6 +11,7 @@ Log.Logger = new LoggerConfiguration()
 
 var builder = WebApplication.CreateBuilder(args);
 builder.AddAzureServiceBusClient(connectionName: "messaging");
+builder.AddRedisClient(connectionName: "cache");
 builder.Services.AddSerilog(config => config.ReadFrom.Configuration(builder.Configuration));
 builder.Services.AddOpenTelemetryServices(builder.Configuration);
 builder.Services.AddControllers();
