@@ -22,7 +22,13 @@ internal class PersonalInformation
     public static Result<PersonalInformation> Create(string fullName, string email, DateOnly dateOfBirth)
     {
         var personalInformation = new PersonalInformation(fullName, email, dateOfBirth);
-        return personalInformation.Validate();
+
+        var validationResult = personalInformation.Validate();
+        if (!validationResult.IsSuccess)
+        {
+            return validationResult.Map();
+        }
+        return Result.Success(personalInformation);
     }
 
 

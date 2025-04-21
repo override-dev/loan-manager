@@ -1,5 +1,7 @@
-﻿using Ardalis.Result;
+﻿using System.ComponentModel.DataAnnotations;
+using Ardalis.Result;
 using Server.Loan.Domain.Constants;
+using static Server.Loan.Domain.Constants.DomainErrors;
 
 namespace Server.Loan.Domain.Aggregates.Loan.Entities;
 
@@ -23,7 +25,13 @@ internal class BankInformation
     public static Result<BankInformation> Create(string bankName, string accountType, string accountNumber)
     {
         var bankInformation =  new BankInformation(bankName, accountType, accountNumber);
-        return bankInformation.Validate();
+
+        var validationResult = bankInformation.Validate();
+        if (!validationResult.IsSuccess)
+        {
+            return validationResult.Map();
+        }
+        return Result.Success(bankInformation);
     }
 
 

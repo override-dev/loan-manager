@@ -7,4 +7,5 @@ internal enum LoanStatus
     Canceled,
     Approved,
     Rejected,
+    Created
 }

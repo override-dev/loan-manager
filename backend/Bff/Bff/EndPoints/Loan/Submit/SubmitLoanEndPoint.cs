@@ -1,14 +1,13 @@
 ﻿using Bff.Interfaces;
 using FastEndpoints;
 using Loan.Shared.Contracts.Requests;
-using Loan.StorageProvider.Interfaces;
 using Loan.StorageProvider.Models;
 
 namespace Bff.EndPoints.Loan.Submit;
 
 
 //TODO: apply outbox pattern 
-internal class SubmitLoanEndPoint(IStorageProvider storageProvider, ILoanPublisher loanPublisher):Endpoint<SubmitLoanRequest, SubmitLoanResponse>
+internal class SubmitLoanEndPoint(ILoanDraftStorageProvider storageProvider, ILoanPublisher loanPublisher):Endpoint<SubmitLoanRequest, SubmitLoanResponse>
 {
     public override void Configure()
     {

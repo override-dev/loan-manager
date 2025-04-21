@@ -7,7 +7,7 @@ using StackExchange.Redis;
 
 namespace Server.Loan.Infrastructure.Services;
 
-internal class RedisLoanRepository([FromKeyedServices("loan-database")] IConnectionMultiplexer chatConnectionMux) : ILoanRepository
+internal class RedisLoanDraftsRepository([FromKeyedServices("loan-drafts")] IConnectionMultiplexer chatConnectionMux) : ILoanRepository
 {
     private readonly RedisStorageProvider storageProvider = new(chatConnectionMux);
 
@@ -15,9 +15,9 @@ internal class RedisLoanRepository([FromKeyedServices("loan-database")] IConnect
 
     public async Task<List<LoanEntity>> GetAllLoansAsync() => await storageProvider.GetAllLoansAsync();
 
-    public async Task<LoanEntity?> GetLoanByIdAsync(string loanId)=> await storageProvider.GetLoanByIdAsync(loanId);
+    public async Task<LoanEntity?> GetLoanByIdAsync(string loanId) => await storageProvider.GetLoanByIdAsync(loanId);
 
-    public async Task<bool> SubmitLoanAsync(string loanId)=> await storageProvider.SubmitLoanAsync(loanId);
+    public async Task<bool> SubmitLoanAsync(string loanId) => await storageProvider.SubmitLoanAsync(loanId);
 
     public async Task<bool> UpdateLoanStatusAsync(string loanId, LoanStatus newStatus) => await storageProvider.UpdateLoanStatusAsync(loanId,(int) newStatus);
 }

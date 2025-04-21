@@ -2,17 +2,16 @@ using Bff.Interfaces;
 using Bff.Services;
 using FastEndpoints;
 using FastEndpoints.Swagger;
-using Loan.StorageProvider;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.AddAzureServiceBusClient(connectionName: "messaging");
-builder.AddRedisClient(connectionName: "cache");
+builder.AddKeyedRedisClient(name: "loan-drafts");
 builder.Services.AddControllers();
 builder.Services.AddTransient<ILoanPublisher, LoanPublisher>();
-builder.Services.AddStorageProvider();
+builder.Services.AddTransient<ILoanDraftStorageProvider, LoanDraftStorageProvider>();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 

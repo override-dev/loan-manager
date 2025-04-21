@@ -45,7 +45,13 @@ internal class Loan
     {
         var loan = new Loan(Id, LoanAmount, LoanTerm, LoanPurpose,loanStatus, personalInformation,bankInformation);
 
-        return loan.Validate();
+        var validationResult = loan.Validate();
+
+        if (!validationResult.IsSuccess)
+        {
+            return validationResult.Map();
+        }
+        return Result.Success(loan);
     }
 
 
@@ -101,6 +107,16 @@ internal class Loan
         return Result.Success();
     }
 
+    public Result CreateNewLoan()
+    {
+        if (LoanStatus != LoanStatus.Pending)
+        {
+            return Result.Invalid(new ValidationError(nameof(LoanStatus), string.Empty, DomainErrors.Loan.LOAN_STATUS_INVALID, ValidationSeverity.Error));
+        }
+        LoanStatus =  LoanStatus.Created;
+        _domainEvents.Add(new LoanCreatedEvent(Id));
+        return Result.Success();
+    }
 
     public Result Reset()
     {

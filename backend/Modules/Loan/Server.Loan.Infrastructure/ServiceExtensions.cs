@@ -11,11 +11,10 @@ internal static class ServiceExtensions
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services)
     {
-        services.AddMemoryCache();
-        services.AddStorageProvider(); 
-
         // Register the repository that uses the Redis storage provider
-        services.AddScoped<ILoanRepository, RedisLoanRepository>();
+        services.AddKeyedTransient<ILoanRepository, RedisLoanRepository>("loan-database");
+        services.AddKeyedTransient<ILoanRepository, RedisLoanDraftsRepository>("loan-drafts");
+        services.AddTransient<ILoanRepositoryFactory, LoanRepositoryFactory>();
         services.AddHostedService<LoanNotificationConsumer>();
         services.AddTransient<SubmitLoanRequestHandler>();
         services.AddTransient<IStartupFilter, MessageHandlerRegistrationStartupFilter>();
