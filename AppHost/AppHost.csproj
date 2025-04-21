@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\backend\Bff\Bff\Bff.csproj" />
+    <ProjectReference Include="..\backend\Server.Dashboard\Server.Dashboard.csproj" />
     <ProjectReference Include="..\backend\Server\Server.csproj" />
   </ItemGroup>
 

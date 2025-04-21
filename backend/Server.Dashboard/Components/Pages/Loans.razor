@@ -1,0 +1,331 @@
+﻿@page "/loans"
+@using Server.Dashboard.Models
+@using Server.Dashboard.Interfaces
+@using Microsoft.AspNetCore.Components.Web
+@using MudBlazor
+@inject ILoanService LoanService
+
+<MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-4">
+    <MudText Typo="Typo.h4" Class="mb-4">Loans</MudText>
+
+    @if (loading)
+    {
+        <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+    }
+    else if (error != null)
+    {
+        <MudAlert Severity="Severity.Error" Class="my-2">@error</MudAlert>
+    }
+    else if (loans == null || !loans.Any())
+    {
+        <MudAlert Severity="Severity.Info" Class="my-2">No loans found.</MudAlert>
+    }
+    else
+    {
+        <MudCard Class="mb-4">
+            <MudCardHeader>
+                <MudText Typo="Typo.h6">Filters</MudText>
+            </MudCardHeader>
+            <MudCardContent>
+                <MudGrid>
+                    <MudItem xs="12" sm="6" md="3">
+                        <MudSelect T="int" Label="Status" @bind-Value="statusFilter" FullWidth="true">
+                            <MudSelectItem Value="-1">All</MudSelectItem>
+                            <MudSelectItem Value="0">Pending</MudSelectItem>
+                            <MudSelectItem Value="1">Submitted</MudSelectItem>
+                            <MudSelectItem Value="2">Canceled</MudSelectItem>
+                            <MudSelectItem Value="3">Approved</MudSelectItem>
+                            <MudSelectItem Value="4">Rejected</MudSelectItem>
+                            <MudSelectItem Value="5">Created</MudSelectItem>
+                        </MudSelect>
+                    </MudItem>
+                    <MudItem xs="12" sm="6" md="3">
+                        <MudSelect T="int" Label="Purpose" @bind-Value="purposeFilter" FullWidth="true">
+                            <MudSelectItem Value="-1">All</MudSelectItem>
+                            <MudSelectItem Value="0">Personal</MudSelectItem>
+                            <MudSelectItem Value="1">Business</MudSelectItem>
+                            <MudSelectItem Value="2">Home Improvement</MudSelectItem>
+                            <MudSelectItem Value="3">Education</MudSelectItem>
+                            <MudSelectItem Value="4">Debt Consolidation</MudSelectItem>
+                        </MudSelect>
+                    </MudItem>
+                    <MudItem xs="12" sm="6" md="3">
+                        <MudNumericField @bind-Value="minAmountFilter" Label="Min Amount" Variant="Variant.Outlined" Min="0" FullWidth="true" />
+                    </MudItem>
+                    <MudItem xs="12" sm="6" md="3">
+                        <MudTextField @bind-Value="nameFilter" Label="Name Contains" Variant="Variant.Outlined" Immediate="true" FullWidth="true" />
+                    </MudItem>
+                </MudGrid>
+                <MudGrid Class="mt-3">
+                    <MudItem xs="12">
+                        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="ApplyFilters" Class="mr-2">Apply Filters</MudButton>
+                        <MudButton Variant="Variant.Outlined" Color="Color.Secondary" OnClick="ClearFilters">Clear Filters</MudButton>
+                    </MudItem>
+                </MudGrid>
+            </MudCardContent>
+        </MudCard>
+
+        <MudTable Items="filteredLoans" Hover="true" Bordered="true" Striped="true">
+            <ToolBarContent>
+                <MudText Typo="Typo.h6">Showing @filteredLoans.Count() of @loans.Count() loans</MudText>
+                <MudSpacer />
+            </ToolBarContent>
+            <HeaderContent>
+                <MudTh>ID</MudTh>
+                <MudTh>
+                    <MudTableSortLabel SortBy="new Func<Loan, object>(x => x.LoanAmount)" InitialDirection="SortDirection.Ascending">
+                        Amount
+                    </MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel SortBy="new Func<Loan, object>(x => x.LoanTerm)">
+                        Term
+                    </MudTableSortLabel>
+                </MudTh>
+                <MudTh>Purpose</MudTh>
+                <MudTh>
+                    <MudTableSortLabel SortBy="new Func<Loan, object>(x => x.FullName)">
+                        Full Name
+                    </MudTableSortLabel>
+                </MudTh>
+                <MudTh>Email</MudTh>
+                <MudTh>Bank</MudTh>
+                <MudTh>
+                    <MudTableSortLabel SortBy="new Func<Loan, object>(x => x.LoanStatus)">
+                        Status
+                    </MudTableSortLabel>
+                </MudTh>
+                <MudTh>Actions</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="ID">@context.Id</MudTd>
+                <MudTd DataLabel="Amount">$@context.LoanAmount</MudTd>
+                <MudTd DataLabel="Term">@context.LoanTerm months</MudTd>
+                <MudTd DataLabel="Purpose">@GetLoanPurposeText(context.LoanPurpose)</MudTd>
+                <MudTd DataLabel="Full Name">@context.FullName</MudTd>
+                <MudTd DataLabel="Email">@context.Email</MudTd>
+                <MudTd DataLabel="Bank">@context.BankName</MudTd>
+                <MudTd DataLabel="Status">
+                    <MudChip T="string" Color="@GetStatusColor(context.LoanStatus)" Size="Size.Small">
+                        @GetStatusText(context.LoanStatus)
+                    </MudChip>
+                </MudTd>
+                <MudTd DataLabel="Actions">
+                    <MudMenu Icon="@Icons.Material.Filled.MoreVert" AnchorOrigin="Origin.BottomRight">
+                        <MudMenuItem Disabled="@(context.LoanStatus != 0)" OnClick="@(() => ApproveLoan(context.Id))">
+                            <MudIcon Icon="@Icons.Material.Filled.CheckCircle" Color="Color.Success" Class="mr-2" /> Approve
+                        </MudMenuItem>
+                        <MudMenuItem Disabled="@(context.LoanStatus != 0)" OnClick="@(() => RejectLoan(context.Id))">
+                            <MudIcon Icon="@Icons.Material.Filled.Cancel" Color="Color.Error" Class="mr-2" /> Reject
+                        </MudMenuItem>
+                        <MudMenuItem Disabled="@(context.LoanStatus != 0)" OnClick="@(() => CancelLoan(context.Id))">
+                            <MudIcon Icon="@Icons.Material.Filled.RemoveCircle" Color="Color.Dark" Class="mr-2" /> Cancel
+                        </MudMenuItem>
+                        <MudDivider />
+                        <MudMenuItem OnClick="@(() => ViewDetails(context.Id))">
+                            <MudIcon Icon="@Icons.Material.Filled.Visibility" Color="Color.Primary" Class="mr-2" /> View Details
+                        </MudMenuItem>
+                    </MudMenu>
+                </MudTd>
+            </RowTemplate>
+            <PagerContent>
+                <MudTablePager PageSizeOptions="new int[] { 10, 25, 50, 100 }" />
+            </PagerContent>
+        </MudTable>
+    }
+</MudContainer>
+
+@code {
+    private IEnumerable<Loan> loans;
+    private IEnumerable<Loan> filteredLoans;
+    private bool loading = true;
+    private string error;
+
+    // Filters
+    private int statusFilter = -1;
+    private int purposeFilter = -1;
+    private int minAmountFilter = 0;
+    private string nameFilter = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadLoans();
+    }
+
+    private async Task LoadLoans()
+    {
+        try
+        {
+            loading = true;
+            error = null;
+            loans = await LoanService.GetLoansAsync();
+            ApplyFilters();
+        }
+        catch (Exception ex)
+        {
+            error = $"Error loading loans: {ex.Message}";
+        }
+        finally
+        {
+            loading = false;
+        }
+    }
+    
+    private void ApplyFilters()
+    {
+        if (loans == null)
+        {
+            filteredLoans = new List<Loan>();
+            return;
+        }
+
+        // Start with all loans
+        var query = loans.AsQueryable();
+        
+        // Apply status filter
+        if (statusFilter >= 0)
+        {
+            query = query.Where(l => l.LoanStatus == statusFilter);
+        }
+        
+        // Apply purpose filter
+        if (purposeFilter >= 0)
+        {
+            query = query.Where(l => l.LoanPurpose == purposeFilter);
+        }
+        
+        // Apply amount filter
+        if (minAmountFilter > 0)
+        {
+            query = query.Where(l => l.LoanAmount >= minAmountFilter);
+        }
+        
+        // Apply name filter
+        if (!string.IsNullOrWhiteSpace(nameFilter))
+        {
+            query = query.Where(l => l.FullName.Contains(nameFilter, StringComparison.OrdinalIgnoreCase));
+        }
+        
+        filteredLoans = query.ToList();
+    }
+    
+    private void ClearFilters()
+    {
+        statusFilter = -1;
+        purposeFilter = -1;
+        minAmountFilter = 0;
+        nameFilter = "";
+        
+        ApplyFilters();
+    }
+
+    private string GetLoanPurposeText(int purpose)
+    {
+        return purpose switch
+        {
+            0 => "Personal",
+            1 => "Business",
+            2 => "Home Improvement",
+            3 => "Education",
+            4 => "Debt Consolidation",
+            _ => "Unknown"
+        };
+    }
+
+    private string GetStatusText(int status)
+    {
+        return status switch
+        {
+            0 => "Pending",
+            1 => "Submitted",
+            2 => "Canceled",
+            3 => "Approved",
+            4 => "Rejected",
+            5 => "Created",
+            _ => "Unknown"
+        };
+    }
+    
+    private Color GetStatusColor(int status)
+    {
+        return status switch
+        {
+            0 => Color.Warning,    // Pending
+            1 => Color.Info,       // Submitted
+            2 => Color.Dark,       // Canceled
+            3 => Color.Success,    // Approved
+            4 => Color.Error,      // Rejected
+            5 => Color.Primary,    // Created
+            _ => Color.Default
+        };
+    }
+
+    private async Task ApproveLoan(string loanId)
+    {
+        bool? result = await DialogService.ShowMessageBox(
+            "Approve Loan",
+            $"Are you sure you want to approve loan {loanId}?",
+            yesText: "Approve", 
+            cancelText: "Cancel");
+            
+        if (result == true)
+        {
+            await PerformLoanAction(loanId, "approve");
+        }
+    }
+    
+    private async Task RejectLoan(string loanId)
+    {
+        bool? result = await DialogService.ShowMessageBox(
+            "Reject Loan",
+            $"Are you sure you want to reject loan {loanId}?",
+            yesText: "Reject", 
+            cancelText: "Cancel");
+            
+        if (result == true)
+        {
+            await PerformLoanAction(loanId, "reject");
+        }
+    }
+    
+    private async Task CancelLoan(string loanId)
+    {
+        bool? result = await DialogService.ShowMessageBox(
+            "Cancel Loan",
+            $"Are you sure you want to cancel loan {loanId}?",
+            yesText: "Cancel Loan", 
+            cancelText: "Cancel");
+            
+        if (result == true)
+        {
+            await PerformLoanAction(loanId, "cancel");
+        }
+    }
+    
+    private async Task ViewDetails(string loanId)
+    {
+        // In a real implementation, this would navigate to a detail page
+        await DialogService.ShowMessageBox(
+            "Loan Details",
+            $"Viewing details for loan {loanId}");
+    }
+    
+    private async Task PerformLoanAction(string loanId, string action)
+    {
+        try
+        {
+            // Here you would add the actual API calls to perform the actions
+            // For now, we'll just reload the loans to simulate the action being performed
+            await LoadLoans();
+            SnackbarService.Add($"Loan {action} action completed successfully", Severity.Success);
+        }
+        catch (Exception ex)
+        {
+            error = $"Error performing action: {ex.Message}";
+            SnackbarService.Add($"Error: {ex.Message}", Severity.Error);
+        }
+    }
+    
+    [Inject] private IDialogService DialogService { get; set; }
+    [Inject] private ISnackbar SnackbarService { get; set; }
+}

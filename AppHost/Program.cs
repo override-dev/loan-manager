@@ -1,4 +1,5 @@
 using Aspire.Hosting;
+using Projects;
 
 var builder = DistributedApplication.CreateBuilder(args);
 
@@ -13,7 +14,7 @@ var loanDatabase = builder.AddRedis("loan-database");
 serviceBus.AddServiceBusQueue("loan-notifications");
 
 // Add projects with reference to Service Bus
-builder.AddProject<Projects.Server>("server")
+var server = builder.AddProject<Projects.Server>("server")
     .WithExternalHttpEndpoints()
     .WithReference(serviceBus)
     .WaitFor(serviceBus)
@@ -28,6 +29,7 @@ builder.AddProject<Projects.Bff>("bff")
     .WithReference(loanDrafts)
     .WaitFor(loanDrafts);
 
-builder.AddProject<Projects.Server_Dashboard>("server-dashboard");
-
+builder.AddProject<Server_Dashboard>("dashboard")
+    .WaitFor(server);
+    
 builder.Build().Run();
