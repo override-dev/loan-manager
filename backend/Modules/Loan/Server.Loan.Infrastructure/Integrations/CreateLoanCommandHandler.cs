@@ -1,7 +1,9 @@
-﻿using Ardalis.Result;
+﻿using System.Text.Json;
+using Ardalis.Result;
 using FastEndpoints;
 using Loan.StorageProvider.Models;
 using Server.Loan.Application.Features.Loan.CreateLoan;
+using Server.Loan.Contracts.Features.Loan.Notifications;
 using Server.Loan.Infrastructure.Enums;
 using Server.Loan.Infrastructure.Interfaces;
 
@@ -108,6 +110,11 @@ namespace Server.Loan.Infrastructure.Integrations
                 return resetLoanStatus.Map();
             }
 
+            foreach (var @event in loan.DomainEvents)
+            {
+                var eventNotification = new LoanNotification(JsonSerializer.Serialize(@event));
+                await eventNotification.PublishAsync(cancellation: ct);
+            }
             return Result<CreateLoanCommandResponse>.Success(new CreateLoanCommandResponse(loanEntity.LoanId, loan.LoanStatus));
         }
     }
