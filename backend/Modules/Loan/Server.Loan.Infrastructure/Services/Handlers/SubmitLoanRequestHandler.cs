@@ -1,5 +1,5 @@
 ﻿using System.Text.Json;
-using Loan.Shared.Contracts.Commands;
+using Loan.Shared.Contracts.Requests;
 using Microsoft.Extensions.Logging;
 using Server.Loan.Application.Interfaces;
 
@@ -12,7 +12,7 @@ internal class SubmitLoanRequestHandler(ILogger<SubmitLoanRequestHandler> logger
 {
     public async Task HandleAsync(string messageContent, CancellationToken cancellationToken)
     {
-        var loanSubmission = JsonSerializer.Deserialize<SubmitLoanRequest>(messageContent);
+        var loanSubmission = JsonSerializer.Deserialize<LoanSubmissionRequested>(messageContent);
 
         if (loanSubmission is null)
         {

@@ -1,8 +1,8 @@
-﻿using Loan.Shared.Contracts.Commands;
+﻿using Loan.Shared.Contracts.Requests;
 
 namespace Bff.Interfaces;
 
 internal interface ILoanPublisher
 {
-    Task PublishLoanSubmittedAsync(SubmitLoanRequest command, CancellationToken cancellationToken);
+    Task PublishLoanSubmittedAsync(LoanSubmissionRequested command, CancellationToken cancellationToken);
 }

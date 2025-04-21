@@ -9,7 +9,6 @@ var serviceBus = builder.AddAzureServiceBus("messaging")
 var cache = builder.AddRedis("cache");
 
 // Add topic separately for better readability and control
-//serviceBus.AddServiceBusTopic("loan-notifications");
 serviceBus.AddServiceBusQueue("loan-notifications");
 
 // Add projects with reference to Service Bus

@@ -1,5 +1,6 @@
 ﻿using Bff.Interfaces;
 using FastEndpoints;
+using Loan.Shared.Contracts.Requests;
 using Loan.StorageProvider.Interfaces;
 using Loan.StorageProvider.Models;
 
@@ -19,8 +20,6 @@ internal class SubmitLoanEndPoint(IStorageProvider storageProvider, ILoanPublish
             s.Summary = "Submit a loan application";
             s.Description = "Submit a loan application to the system";
             s.Response<SubmitLoanResponse>();
-            s.Response(400, "Invalid request");
-            s.Response(500, "Internal server error");
         });
     }
     public override async Task HandleAsync(SubmitLoanRequest req, CancellationToken ct)
@@ -32,8 +31,14 @@ internal class SubmitLoanEndPoint(IStorageProvider storageProvider, ILoanPublish
             LoanAmount = req.LoanAmount,
             LoanTerm = req.LoanTerm,
             LoanPurpose = req.LoanPurpose,
-            BankInformation= new BankInformationEntity(req.BankInformation.BankName, req.BankInformation.AccountType, req.BankInformation.AccountNumber),
-            PersonalInformation = new PersonalInformationEntity(req.PersonalInformation.FullName, req.PersonalInformation.Email, DateOnly.FromDateTime(req.PersonalInformation.DateOfBirth)),
+            BankInformation= new BankInformationEntity(
+                req.BankInformation.BankName, 
+                req.BankInformation.AccountType, 
+                req.BankInformation.AccountNumber),
+            PersonalInformation = new PersonalInformationEntity(
+                req.PersonalInformation.FullName, 
+                req.PersonalInformation.Email, 
+                DateOnly.FromDateTime(req.PersonalInformation.DateOfBirth)),
         };
 
         //2.- Save the loan entity to the storage provider
@@ -42,14 +47,7 @@ internal class SubmitLoanEndPoint(IStorageProvider storageProvider, ILoanPublish
 
 
         //3.- Publish the loan creation event to the message broker
-        var loanCreationRequest = new global::Loan.Shared.Contracts.Commands.SubmitLoanRequest(
-            loanCreationResult.LoanId,// we pass the loan ID from the storage provider
-            req.LoanAmount,
-            req.LoanTerm,
-            req.LoanPurpose,
-            new(req.BankInformation.BankName, req.BankInformation.AccountType, req.BankInformation.BankName),
-            new(req.PersonalInformation.FullName, req.PersonalInformation.Email, req.PersonalInformation.DateOfBirth)
-        );
+        var loanCreationRequest = new LoanSubmissionRequested(loanCreationResult.LoanId);
 
         await loanPublisher.PublishLoanSubmittedAsync(loanCreationRequest, ct);
 

@@ -5,6 +5,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Loan.Shared.Contracts.Models;
 using Server.Loan.Application.Interfaces;
+using Loan.Shared.Contracts.Constants;
 
 namespace Server.Loan.Infrastructure.Services;
 
@@ -57,7 +58,7 @@ internal sealed class LoanNotificationConsumer(
         }
 
         var serviceBusClient = serviceProvider.GetRequiredService<ServiceBusClient>();
-        _processor = serviceBusClient.CreateProcessor(queueName: "loan-notifications");
+        _processor = serviceBusClient.CreateProcessor(queueName:Topics.LoanQueueName);
 
         _processor.ProcessMessageAsync += ProcessMessageAsync;
         _processor.ProcessErrorAsync += ProcessErrorAsync;

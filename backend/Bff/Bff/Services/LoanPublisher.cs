@@ -1,20 +1,20 @@
 ﻿using System.Text.Json;
 using Azure.Messaging.ServiceBus;
 using Bff.Interfaces;
-using Loan.Shared.Contracts.Commands;
 using Loan.Shared.Contracts.Models;
+using Loan.Shared.Contracts.Requests;
 
 namespace Bff.Services;
 
 internal class LoanPublisher(ServiceBusClient mainBusClient) : ILoanPublisher
 {
-    public async Task PublishLoanSubmittedAsync(SubmitLoanRequest command, CancellationToken cancellationToken)
+    public async Task PublishLoanSubmittedAsync(LoanSubmissionRequested command, CancellationToken cancellationToken)
     {
         var commandJson = JsonSerializer.Serialize(command);
-        var envelop = new MessageEnvelope(nameof(SubmitLoanRequest), commandJson);
+        var envelop = new MessageEnvelope(nameof(LoanSubmissionRequested), commandJson);
         var json = JsonSerializer.Serialize(envelop);
         await mainBusClient
-             .CreateSender("loan-notifications")
+             .CreateSender(Loan.Shared.Contracts.Constants.Topics.LoanQueueName)
              .SendMessageAsync(new ServiceBusMessage(json), cancellationToken);
     }
 }
