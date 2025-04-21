@@ -9,6 +9,7 @@
 	<ItemGroup>
 		<InternalsVisibleTo Include="Server.Loan.Infrastructure" />
 		<InternalsVisibleTo Include="Server.Loan.Application" />
+		<InternalsVisibleTo Include="Server.Loan.EndPoints"/>
 	</ItemGroup>
 
 	<ItemGroup>

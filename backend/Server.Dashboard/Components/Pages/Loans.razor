@@ -112,13 +112,13 @@
                 </MudTd>
                 <MudTd DataLabel="Actions">
                     <MudMenu Icon="@Icons.Material.Filled.MoreVert" AnchorOrigin="Origin.BottomRight">
-                        <MudMenuItem Disabled="@(context.LoanStatus != 0)" OnClick="@(() => ApproveLoan(context.Id))">
+                        <MudMenuItem Disabled="@(context.LoanStatus != 0 && context.LoanStatus != 1)" OnClick="@(() => ApproveLoan(context.Id))">
                             <MudIcon Icon="@Icons.Material.Filled.CheckCircle" Color="Color.Success" Class="mr-2" /> Approve
                         </MudMenuItem>
-                        <MudMenuItem Disabled="@(context.LoanStatus != 0)" OnClick="@(() => RejectLoan(context.Id))">
+                        <MudMenuItem Disabled="@(context.LoanStatus != 0 && context.LoanStatus != 1)" OnClick="@(() => RejectLoan(context.Id))">
                             <MudIcon Icon="@Icons.Material.Filled.Cancel" Color="Color.Error" Class="mr-2" /> Reject
                         </MudMenuItem>
-                        <MudMenuItem Disabled="@(context.LoanStatus != 0)" OnClick="@(() => CancelLoan(context.Id))">
+                        <MudMenuItem Disabled="@(context.LoanStatus != 0 && context.LoanStatus != 1)" OnClick="@(() => CancelLoan(context.Id))">
                             <MudIcon Icon="@Icons.Material.Filled.RemoveCircle" Color="Color.Dark" Class="mr-2" /> Cancel
                         </MudMenuItem>
                         <MudDivider />
@@ -170,7 +170,7 @@
             loading = false;
         }
     }
-    
+
     private void ApplyFilters()
     {
         if (loans == null)
@@ -181,41 +181,41 @@
 
         // Start with all loans
         var query = loans.AsQueryable();
-        
+
         // Apply status filter
         if (statusFilter >= 0)
         {
             query = query.Where(l => l.LoanStatus == statusFilter);
         }
-        
+
         // Apply purpose filter
         if (purposeFilter >= 0)
         {
             query = query.Where(l => l.LoanPurpose == purposeFilter);
         }
-        
+
         // Apply amount filter
         if (minAmountFilter > 0)
         {
             query = query.Where(l => l.LoanAmount >= minAmountFilter);
         }
-        
+
         // Apply name filter
         if (!string.IsNullOrWhiteSpace(nameFilter))
         {
             query = query.Where(l => l.FullName.Contains(nameFilter, StringComparison.OrdinalIgnoreCase));
         }
-        
+
         filteredLoans = query.ToList();
     }
-    
+
     private void ClearFilters()
     {
         statusFilter = -1;
         purposeFilter = -1;
         minAmountFilter = 0;
         nameFilter = "";
-        
+
         ApplyFilters();
     }
 
@@ -245,7 +245,7 @@
             _ => "Unknown"
         };
     }
-    
+
     private Color GetStatusColor(int status)
     {
         return status switch
@@ -265,43 +265,43 @@
         bool? result = await DialogService.ShowMessageBox(
             "Approve Loan",
             $"Are you sure you want to approve loan {loanId}?",
-            yesText: "Approve", 
+            yesText: "Approve",
             cancelText: "Cancel");
-            
+
         if (result == true)
         {
             await PerformLoanAction(loanId, "approve");
         }
     }
-    
+
     private async Task RejectLoan(string loanId)
     {
         bool? result = await DialogService.ShowMessageBox(
             "Reject Loan",
             $"Are you sure you want to reject loan {loanId}?",
-            yesText: "Reject", 
+            yesText: "Reject",
             cancelText: "Cancel");
-            
+
         if (result == true)
         {
             await PerformLoanAction(loanId, "reject");
         }
     }
-    
+
     private async Task CancelLoan(string loanId)
     {
         bool? result = await DialogService.ShowMessageBox(
             "Cancel Loan",
             $"Are you sure you want to cancel loan {loanId}?",
-            yesText: "Cancel Loan", 
+            yesText: "Cancel Loan",
             cancelText: "Cancel");
-            
+
         if (result == true)
         {
             await PerformLoanAction(loanId, "cancel");
         }
     }
-    
+
     private async Task ViewDetails(string loanId)
     {
         // In a real implementation, this would navigate to a detail page
@@ -309,14 +309,31 @@
             "Loan Details",
             $"Viewing details for loan {loanId}");
     }
-    
+
     private async Task PerformLoanAction(string loanId, string action)
     {
         try
         {
-            // Here you would add the actual API calls to perform the actions
-            // For now, we'll just reload the loans to simulate the action being performed
+            int newStatus;
+
+            switch (action)
+            {
+                case "approve":
+                    newStatus = 3; // Approved
+                    break;
+                case "reject":
+                    newStatus = 4; // Rejected
+                    break;
+                case "cancel":
+                    newStatus = 2; // Canceled
+                    break;
+                default:
+                    throw new ArgumentException($"Action '{action}' not supported");
+            }
+            var result = await LoanService.UploadLoanStatusAsync(loanId, newStatus);
+
             await LoadLoans();
+
             SnackbarService.Add($"Loan {action} action completed successfully", Severity.Success);
         }
         catch (Exception ex)
@@ -325,7 +342,7 @@
             SnackbarService.Add($"Error: {ex.Message}", Severity.Error);
         }
     }
-    
+
     [Inject] private IDialogService DialogService { get; set; }
     [Inject] private ISnackbar SnackbarService { get; set; }
 }

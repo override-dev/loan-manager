@@ -10,11 +10,11 @@ using Server.Loan.Infrastructure.Interfaces;
 
 namespace Server.Loan.Infrastructure.Integrations;
 
-internal class UpdateLoanStatusCommandHandler(ILoanRepository loanRepository) : CommandHandler<UpdateLoanStatusCommand, Result<UpdateLoanStatusCommandResponse>>
+internal class UpdateLoanStatusCommandHandler(ILoanRepositoryFactory loanRepositoryFactory) : CommandHandler<UpdateLoanStatusCommand, Result<UpdateLoanStatusCommandResponse>>
 {
     public override async Task<Result<UpdateLoanStatusCommandResponse>> ExecuteAsync(UpdateLoanStatusCommand command, CancellationToken ct = default)
     {
-
+        var loanRepository = loanRepositoryFactory.Create(Enums.StorageType.Database);
         // we get the loan from the storage
 
         var loanEntity = await loanRepository.GetLoanByIdAsync(command.LoanId);

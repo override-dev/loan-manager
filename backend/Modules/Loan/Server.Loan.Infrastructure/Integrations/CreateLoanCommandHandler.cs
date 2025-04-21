@@ -77,7 +77,7 @@ namespace Server.Loan.Infrastructure.Integrations
             // Map domain model to persistence entity
             var loanEntity = new LoanEntity
             {
-                LoanId = loan.Id.ToString(),
+                LoanId = loan.Id.Value.ToString(),
                 LoanAmount = loan.LoanAmount,
                 LoanTerm = loan.LoanTerm,
                 LoanPurpose = loan.LoanPurpose,

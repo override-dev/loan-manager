@@ -29,6 +29,46 @@
         }
       }
     },
+    "/loan/update-status/{loanId}/{status}": {
+      "post": {
+        "tags": [
+          "Loan"
+        ],
+        "summary": "Update status of a loan",
+        "description": "Update status of a loan",
+        "operationId": "ServerLoanEndPointsLoanUpdateLoanStatusUpdateLoanStatusEndPoint",
+        "parameters": [
+          {
+            "name": "loanId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServerLoanEndPointsLoanUpdateLoanStatusUpdateLoanStatuResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/loan": {
       "get": {
         "tags": [
@@ -73,6 +113,15 @@
           "summary": {
             "type": "string",
             "nullable": true
+          }
+        }
+      },
+      "ServerLoanEndPointsLoanUpdateLoanStatusUpdateLoanStatuResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "loanId": {
+            "type": "string"
           }
         }
       },

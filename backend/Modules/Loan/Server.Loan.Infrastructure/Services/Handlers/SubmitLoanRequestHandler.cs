@@ -4,6 +4,7 @@ using Loan.Shared.Contracts.Requests;
 using Microsoft.Extensions.Logging;
 using Server.Loan.Application.Features.Loan.CreateLoan;
 using Server.Loan.Application.Interfaces;
+using Server.Loan.Contracts.Features.Loan.SubmitLoan;
 using Server.Loan.Infrastructure.Interfaces;
 
 namespace Server.Loan.Infrastructure.Services.Handlers;
@@ -15,22 +16,22 @@ internal class SubmitLoanRequestHandler(ILogger<SubmitLoanRequestHandler> logger
 {
     public async Task HandleAsync(string messageContent, CancellationToken cancellationToken)
     {
-        var loanSubmission = JsonSerializer.Deserialize<LoanSubmissionRequested>(messageContent);
+        var draftLoanSubmission = JsonSerializer.Deserialize<LoanSubmissionRequested>(messageContent);
 
-        if (loanSubmission is null)
+        if (draftLoanSubmission is null)
         {
             logger.LogError("Failed to deserialize SubmitLoanRequest");
             return;
         }
 
-        logger.LogInformation("Processing loan submission request for ID {LoanId}", loanSubmission.LoanId);
+        logger.LogInformation("Processing loan submission request for ID {LoanId}", draftLoanSubmission.LoanId);
 
         var loanDraftsRepository = loanRepositoryFactory.Create(Enums.StorageType.Draft);
-        var loanEntity = await loanDraftsRepository.GetLoanByIdAsync(loanSubmission.LoanId);
+        var loanEntity = await loanDraftsRepository.GetLoanByIdAsync(draftLoanSubmission.LoanId);
 
         if (loanEntity is null)
         {
-            logger.LogError("Loan with ID {LoanId} not found", loanSubmission.LoanId);
+            logger.LogError("Loan with ID {LoanId} not found", draftLoanSubmission.LoanId);
             return;
         }
 
@@ -39,12 +40,25 @@ internal class SubmitLoanRequestHandler(ILogger<SubmitLoanRequestHandler> logger
 
         if(!createLoanResult.IsSuccess)
         {
-            logger.LogError("Failed to create loan with ID {LoanId}", loanSubmission.LoanId);
+            // send notification that loan creation failed
+            logger.LogError("Failed to create loan with ID {LoanId}", draftLoanSubmission.LoanId);
             return;
         }
-        // Implement the business logic for processing the loan submission
-        // This could include saving to a database, calling other services, etc.
 
+
+
+        logger.LogInformation("Loan with ID {LoanId} successfully created", draftLoanSubmission.LoanId);
+        var createdLoanId = createLoanResult.Value.LoanId;
+        var submitLoanCommand = new SubmitLoanCommand(createdLoanId);
+
+        var submitLoanResult = await submitLoanCommand.ExecuteAsync(cancellationToken);
+        if (!submitLoanResult.IsSuccess)
+        {
+            // send notification that loan submission failed
+            logger.LogError("Failed to submit loan with ID {LoanId}", draftLoanSubmission.LoanId);
+            return;
+        }
+ 
         await Task.CompletedTask;
     }
 }

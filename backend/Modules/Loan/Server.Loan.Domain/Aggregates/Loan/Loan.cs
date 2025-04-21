@@ -57,41 +57,41 @@ internal class Loan
 
     public Result Approve()
     {
-        if (LoanStatus != LoanStatus.Pending)
+        
+        if (LoanStatus == LoanStatus.Pending  || LoanStatus == LoanStatus.Submitted)
         {
-            return Result.Invalid(new ValidationError(nameof(LoanStatus), string.Empty, DomainErrors.Loan.LOAN_STATUS_INVALID, ValidationSeverity.Error));
+            LoanStatus = LoanStatus.Approved;
+            _domainEvents.Add(new LoanApprovedEvent(Id));
+
+            return Result.Success();
         }
 
-        LoanStatus = LoanStatus.Approved;
-        _domainEvents.Add(new LoanApprovedEvent(Id));
-
-        return Result.Success();
+        return Result.Invalid(new ValidationError(nameof(LoanStatus), string.Empty, DomainErrors.Loan.LOAN_STATUS_INVALID, ValidationSeverity.Error));
     }
 
     public Result Cancel()
     {
-        if (LoanStatus != LoanStatus.Pending)
+        if (LoanStatus == LoanStatus.Pending || LoanStatus == LoanStatus.Submitted)
         {
-            return Result.Invalid(new ValidationError(nameof(LoanStatus), string.Empty, DomainErrors.Loan.LOAN_STATUS_INVALID, ValidationSeverity.Error));
+            LoanStatus = LoanStatus.Canceled;
+            _domainEvents.Add(new LoanCanceledEvent(Id));
+
+            return Result.Success();
         }
+        return Result.Invalid(new ValidationError(nameof(LoanStatus), string.Empty, DomainErrors.Loan.LOAN_STATUS_INVALID, ValidationSeverity.Error));
 
-        LoanStatus = LoanStatus.Canceled;
-        _domainEvents.Add(new LoanCanceledEvent(Id));
-
-        return Result.Success();
     }
 
     public Result Reject()
     {
-        if (LoanStatus != LoanStatus.Pending)
+        if (LoanStatus == LoanStatus.Pending || LoanStatus == LoanStatus.Submitted)
         {
-            return Result.Invalid(new ValidationError(nameof(LoanStatus), string.Empty, DomainErrors.Loan.LOAN_STATUS_INVALID, ValidationSeverity.Error));
+            LoanStatus = LoanStatus.Rejected;
+            _domainEvents.Add(new LoanRejectedEvent(Id));
+            return Result.Success();
         }
+        return Result.Invalid(new ValidationError(nameof(LoanStatus), string.Empty, DomainErrors.Loan.LOAN_STATUS_INVALID, ValidationSeverity.Error));
 
-        LoanStatus = LoanStatus.Rejected;
-        _domainEvents.Add(new LoanRejectedEvent(Id));
-
-        return Result.Success();
     }
 
     public Result Submit()

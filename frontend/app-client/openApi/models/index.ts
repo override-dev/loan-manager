@@ -25,6 +25,15 @@ export function createServerLoanEndPointsLoanGetLoansLoanFromDiscriminatorValue(
 /**
  * Creates a new instance of the appropriate class based on discriminator value
  * @param parseNode The parse node to use to read the discriminator value and create the object
+ * @returns {ServerLoanEndPointsLoanUpdateLoanStatusUpdateLoanStatuResponse}
+ */
+// @ts-ignore
+export function createServerLoanEndPointsLoanUpdateLoanStatusUpdateLoanStatuResponseFromDiscriminatorValue(parseNode: ParseNode | undefined) : ((instance?: Parsable) => Record<string, (node: ParseNode) => void>) {
+    return deserializeIntoServerLoanEndPointsLoanUpdateLoanStatusUpdateLoanStatuResponse;
+}
+/**
+ * Creates a new instance of the appropriate class based on discriminator value
+ * @param parseNode The parse node to use to read the discriminator value and create the object
  * @returns {ServerWeatherForecast}
  */
 // @ts-ignore
@@ -59,6 +68,16 @@ export function deserializeIntoServerLoanEndPointsLoanGetLoansLoan(serverLoanEnd
         "loanPurpose": n => { serverLoanEndPointsLoanGetLoansLoan.loanPurpose = n.getNumberValue(); },
         "loanStatus": n => { serverLoanEndPointsLoanGetLoansLoan.loanStatus = n.getNumberValue(); },
         "loanTerm": n => { serverLoanEndPointsLoanGetLoansLoan.loanTerm = n.getNumberValue(); },
+    }
+}
+/**
+ * The deserialization information for the current model
+ * @returns {Record<string, (node: ParseNode) => void>}
+ */
+// @ts-ignore
+export function deserializeIntoServerLoanEndPointsLoanUpdateLoanStatusUpdateLoanStatuResponse(serverLoanEndPointsLoanUpdateLoanStatusUpdateLoanStatuResponse: Partial<ServerLoanEndPointsLoanUpdateLoanStatusUpdateLoanStatuResponse> | undefined = {}) : Record<string, (node: ParseNode) => void> {
+    return {
+        "loanId": n => { serverLoanEndPointsLoanUpdateLoanStatusUpdateLoanStatuResponse.loanId = n.getStringValue(); },
     }
 }
 /**
@@ -102,6 +121,16 @@ export function serializeServerLoanEndPointsLoanGetLoansLoan(writer: Serializati
         writer.writeNumberValue("loanPurpose", serverLoanEndPointsLoanGetLoansLoan.loanPurpose);
         writer.writeNumberValue("loanStatus", serverLoanEndPointsLoanGetLoansLoan.loanStatus);
         writer.writeNumberValue("loanTerm", serverLoanEndPointsLoanGetLoansLoan.loanTerm);
+    }
+}
+/**
+ * Serializes information the current object
+ * @param writer Serialization writer to use to serialize this model
+ */
+// @ts-ignore
+export function serializeServerLoanEndPointsLoanUpdateLoanStatusUpdateLoanStatuResponse(writer: SerializationWriter, serverLoanEndPointsLoanUpdateLoanStatusUpdateLoanStatuResponse: Partial<ServerLoanEndPointsLoanUpdateLoanStatusUpdateLoanStatuResponse> | undefined | null = {}) : void {
+    if (serverLoanEndPointsLoanUpdateLoanStatusUpdateLoanStatuResponse) {
+        writer.writeStringValue("loanId", serverLoanEndPointsLoanUpdateLoanStatusUpdateLoanStatuResponse.loanId);
     }
 }
 /**
@@ -168,6 +197,12 @@ export interface ServerLoanEndPointsLoanGetLoansLoan extends Parsable {
      * The loanTerm property
      */
     loanTerm?: number | null;
+}
+export interface ServerLoanEndPointsLoanUpdateLoanStatusUpdateLoanStatuResponse extends Parsable {
+    /**
+     * The loanId property
+     */
+    loanId?: string | null;
 }
 export interface ServerWeatherForecast extends Parsable {
     /**

@@ -15,5 +15,6 @@
  <ItemGroup>
    <ProjectReference Include="..\Server.Loan.Application\Server.Loan.Application.csproj" />
    <ProjectReference Include="..\Server.Loan.Contracts\Server.Loan.Contracts.csproj" />
+   <ProjectReference Include="..\Server.Loan.Domain\Server.Loan.Domain.csproj" />
  </ItemGroup>
 </Project>
