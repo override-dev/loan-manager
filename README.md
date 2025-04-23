@@ -11,6 +11,7 @@ This repository contains implementation guides and best practices for Domain-Dri
 - [Model-View-ViewModel (MVVM)](#model-view-viewmodel-mvvm)
   - [MVVM with TypeScript and React](#mvvm-with-typescript-and-react)
   - [Parent ViewModels in MVVM with TypeScript and React](#parent-viewmodels-in-mvvm-with-typescript-and-react)
+  - [REPR Design pattern with ASP.NET Core](#repr-design-pattern)
 
 ## Introduction
 
@@ -77,3 +78,11 @@ Key topics include:
 - Managing validation across multiple forms
 
 [Read the full article](https://override.dev/mastering-mvvm-with-typescript-and-react-part-2-parent-viewmodels)
+
+
+### RERP Design Pattern
+
+This section explains how to implement the RERP design pattern using ASP.NET Core and the benefits of this design.
+
+[Read the full article](https://override.dev/repr-pattern-in-net-for-clean-api-architecture)
+
