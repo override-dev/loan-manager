@@ -14,6 +14,8 @@ internal class Loan
 
     public LoanId Id { get; private set; }
 
+    public LoanId? DraftId { get; private set; }
+
     public int LoanAmount { get; private set; }
 
     public int LoanTerm { get; private set; }
@@ -29,15 +31,25 @@ internal class Loan
     private readonly List<IDomainEvent> _domainEvents = [];
     public IReadOnlyCollection<IDomainEvent> DomainEvents => _domainEvents.AsReadOnly();
 
-    private Loan(LoanId Id, int LoanAmount, int LoanTerm, int LoanPurpose, LoanStatus loanStatus, PersonalInformation personalInformation, BankInformation bankInformation)
+    private Loan(
+        LoanId id, 
+        int loanAmount,
+        int loanTerm, 
+        int loanPurpose, 
+        LoanStatus loanStatus, 
+        PersonalInformation personalInformation, 
+        BankInformation bankInformation,
+        LoanId? draftId = default
+        )
     {
-        this.Id = Id;
-        this.LoanAmount = LoanAmount;
-        this.LoanTerm = LoanTerm;
-        this.LoanPurpose = LoanPurpose;
+        Id = id;
+        LoanAmount = loanAmount;
+        LoanTerm = loanTerm;
+        LoanPurpose = loanPurpose;
         PersonalInformation = personalInformation;
         BankInformation = bankInformation;
         LoanStatus = loanStatus;
+        DraftId = draftId;
     }
 
 
@@ -54,6 +66,22 @@ internal class Loan
         return Result.Success(loan);
     }
 
+    public Result AssignLoanDraftId(LoanId loanDraftId)
+    {
+        if (loanDraftId == default)
+        {
+            return Result.Invalid(new ValidationError(nameof(loanDraftId), string.Empty, DomainErrors.Loan.LOAN_DRAFT_ID_INVALID, ValidationSeverity.Error));
+        }
+        if(loanDraftId == Id)
+        {
+            return Result.Invalid(new ValidationError(nameof(loanDraftId), string.Empty, DomainErrors.Loan.LOAN_DRAFT_ID_SAME_AS_LOAN_ID, ValidationSeverity.Error));
+        }
+        
+        DraftId = loanDraftId;
+        _domainEvents.Add(new LoanDraftAssignedEvent(Id) { DraftId= loanDraftId.Value.ToString()});
+
+        return Result.Success();
+    }
 
     public Result Approve()
     {

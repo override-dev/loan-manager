@@ -2,6 +2,8 @@
 
 namespace Loan.Shared.Contracts.Notifications;
 
+public record LoanDraftAssigned(string DraftId, string LoanId, int LoanStatus) : BaseMessage;
+
 public record LoanApproved(string LoanId, int LoanStatus) : BaseMessage;
 
 public record LoanRejected(string LoanId, int LoanStatus) : BaseMessage;

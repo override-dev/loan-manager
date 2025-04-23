@@ -4,9 +4,9 @@ using Loan.Shared.Contracts.Abstractions;
 using Loan.Shared.Contracts.Models;
 using Loan.Shared.Contracts.Notifications;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Server.Loan.Contracts.Features.Loan.Notifications;
 using Server.Loan.Domain.Aggregates.Loan.DomainEvents;
-using System.Text.Json;
 using System.Text.Json.Nodes;
 
 namespace Server.Loan.Infrastructure.Integrations.Notifications;
@@ -47,16 +47,16 @@ internal class LoanNotificationHandler(ServiceBusClient mainBusClient, ILogger<L
             }
 
             // Create the corresponding message based on the event type
-            var message = CreateMessageFromEventType(eventType, loanId);
+            var message = CreateMessageFromEventType(eventType, loanId, notification);
 
             // Serialize the message to JSON
-            var messageContent = JsonSerializer.Serialize(message);
+            var messageContent = JsonConvert.SerializeObject(message);
 
             // Create the envelope with the message type and its content
             var envelope = new MessageEnvelope(message.GetType().Name, messageContent);
 
             // Serialize the complete envelope
-            var envelopeJson = JsonSerializer.Serialize(envelope);
+            var envelopeJson = JsonConvert.SerializeObject(envelope);
 
             // Send the message to the service bus
             await mainBusClient
@@ -78,7 +78,7 @@ internal class LoanNotificationHandler(ServiceBusClient mainBusClient, ILogger<L
     /// <param name="eventType">Type of the event</param>
     /// <param name="loanId">ID of the loan</param>
     /// <returns>A message of the appropriate type</returns>
-    private BaseMessage CreateMessageFromEventType(string eventType, string loanId)
+    private BaseMessage CreateMessageFromEventType(string eventType, string loanId, LoanNotification loanNotification)
     {
         // Determine the loan status based on the event type
         int loanStatus = DetermineLoanStatus(eventType);
@@ -91,8 +91,24 @@ internal class LoanNotificationHandler(ServiceBusClient mainBusClient, ILogger<L
             nameof(LoanCreatedEvent) => new LoanCreated(loanId, loanStatus),
             nameof(LoanSubmittedEvent) => new LoanSubmitted(loanId, loanStatus),
             nameof(LoanResetEvent) => new LoanStatusUpdated(loanId, loanStatus),
+            nameof(LoanDraftAssignedEvent) => GenerateDraftAssignedEvent(loanStatus, loanNotification),
             _ => new LoanStatusUpdated(loanId, -1) // Unknown event type defaults to status update with unknown status
         };
+    }
+
+    private LoanDraftAssigned GenerateDraftAssignedEvent(int loanStatus, LoanNotification loanNotification)
+    {
+        var draftAssignedEvent = JsonConvert.DeserializeObject<LoanDraftAssignedEvent>(loanNotification.Event);
+        if (draftAssignedEvent != null)
+        {
+            return new LoanDraftAssigned(
+                draftAssignedEvent.DraftId,
+                draftAssignedEvent.LoanId.Value.ToString(), 
+                loanStatus);
+        }
+        logger.LogWarning("Failed to deserialize LoanDraftAssignedEvent from notification: {Event}", loanNotification.Event);
+
+        throw new InvalidOperationException("Failed to deserialize LoanDraftAssignedEvent");
     }
 
     /// <summary>
@@ -106,6 +122,7 @@ internal class LoanNotificationHandler(ServiceBusClient mainBusClient, ILogger<L
         nameof(LoanRejectedEvent) => 4, // Rejected
         nameof(LoanCanceledEvent) => 2, // Canceled
         nameof(LoanCreatedEvent) => 5,  // Created
+        nameof(LoanDraftAssigned) => 6, // Draft Assigned
         nameof(LoanSubmittedEvent) => 1, // Submitted
         nameof(LoanResetEvent) => 0,    // Pending/Reset
         _ => -1 // Unknown status

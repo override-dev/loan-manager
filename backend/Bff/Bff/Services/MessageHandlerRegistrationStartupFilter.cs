@@ -15,6 +15,9 @@ internal class MessageHandlerRegistrationStartupFilter(
             nameof(LoanSubmitted),
             serviceProvider.GetRequiredService<LoanSubmittedHandler>());
 
+        registry.RegisterHandler(nameof(LoanDraftAssigned),
+            serviceProvider.GetRequiredService<DraftAssignedHandler>());
+
         // Add more handlers as needed
 
         return next;

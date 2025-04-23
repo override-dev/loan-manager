@@ -1,9 +1,10 @@
-﻿using System.Text.Json;
-using Ardalis.Result;
+﻿using Ardalis.Result;
 using FastEndpoints;
 using Loan.StorageProvider.Models;
+using Newtonsoft.Json;
 using Server.Loan.Application.Features.Loan.CreateLoan;
 using Server.Loan.Contracts.Features.Loan.Notifications;
+using Server.Loan.Domain.Aggregates.Loan.ValueObjects;
 using Server.Loan.Infrastructure.Enums;
 using Server.Loan.Infrastructure.Interfaces;
 
@@ -13,7 +14,7 @@ internal class CreateLoanCommandHandler(ILoanRepositoryFactory loanRepositoryFac
 {
     public override async Task<Result<CreateLoanCommandResponse>> ExecuteAsync(CreateLoanCommand command, CancellationToken ct = default)
     {
-        var loanDraftRepository = loanRepositoryFactory.Create(Enums.StorageType.Draft);
+        var loanDraftRepository = loanRepositoryFactory.Create(StorageType.Draft);
 
         var loanDraft = await loanDraftRepository.GetLoanByIdAsync(command.DraftLoanId);
 
@@ -76,6 +77,13 @@ internal class CreateLoanCommandHandler(ILoanRepositoryFactory loanRepositoryFac
             return loanCreationResult.Map();
         }
 
+        var assignDraftResult = loan.AssignLoanDraftId(new LoanId(new Guid(loanDraft.LoanId)));
+
+        if (!assignDraftResult.IsSuccess)
+        {
+            return assignDraftResult.Map();
+        }
+
         // Map domain model to persistence entity
         var loanEntity = new LoanEntity
         {
@@ -109,10 +117,10 @@ internal class CreateLoanCommandHandler(ILoanRepositoryFactory loanRepositoryFac
         {
             return resetLoanStatus.Map();
         }
-
+        // Notify the consumer about the loan creation
         foreach (var @event in loan.DomainEvents)
         {
-            var eventNotification = new LoanNotification(JsonSerializer.Serialize(@event));
+            var eventNotification = new LoanNotification(JsonConvert.SerializeObject(@event));
             await eventNotification.PublishAsync(cancellation: ct);
         }
         return Result<CreateLoanCommandResponse>.Success(new CreateLoanCommandResponse(loanEntity.LoanId, loan.LoanStatus));

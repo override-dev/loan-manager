@@ -12,6 +12,7 @@
    <PackageReference Include="Aspire.Azure.Messaging.ServiceBus" Version="9.2.0" />
    <PackageReference Include="FastEndpoints" Version="5.35.0" />
    <PackageReference Include="FastEndpoints.Messaging.Core" Version="5.35.0" />
+   <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
  </ItemGroup>
  <ItemGroup>
    <ProjectReference Include="..\..\..\Loan.Shared.Contracts\Loan.Shared.Contracts.csproj" />

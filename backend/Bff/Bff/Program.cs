@@ -16,6 +16,7 @@ builder.Services.AddTransient<ILoanPublisher, LoanPublisher>();
 builder.Services.AddTransient<ILoanDraftStorageProvider, LoanDraftStorageProvider>();
 builder.Services.AddHostedService<LoanNotificationConsumer>();
 builder.Services.AddTransient<LoanSubmittedHandler>();
+builder.Services.AddTransient<DraftAssignedHandler>();
 builder.Services.AddSingleton<IMessageHandlerRegistry, MessageHandlerRegistry>();
 builder.Services.AddTransient<IStartupFilter, MessageHandlerRegistrationStartupFilter>();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
