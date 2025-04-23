@@ -1,5 +1,7 @@
 using Bff.Interfaces;
+using Bff.Interfaces.Interfaces;
 using Bff.Services;
+using Bff.Services.Handlers;
 using FastEndpoints;
 using FastEndpoints.Swagger;
 using Scalar.AspNetCore;
@@ -12,6 +14,10 @@ builder.AddKeyedRedisClient(name: "loan-drafts");
 builder.Services.AddControllers();
 builder.Services.AddTransient<ILoanPublisher, LoanPublisher>();
 builder.Services.AddTransient<ILoanDraftStorageProvider, LoanDraftStorageProvider>();
+builder.Services.AddHostedService<LoanNotificationConsumer>();
+builder.Services.AddTransient<LoanSubmittedHandler>();
+builder.Services.AddSingleton<IMessageHandlerRegistry, MessageHandlerRegistry>();
+builder.Services.AddTransient<IStartupFilter, MessageHandlerRegistrationStartupFilter>();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
