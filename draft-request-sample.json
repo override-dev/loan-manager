@@ -1,0 +1,15 @@
+{
+  "LoanAmount": 25000,
+  "LoanTerm": 60,
+  "LoanPurpose": 2,
+  "BankInformation": {
+    "BankName": "First National Bank",
+    "AccountType": "Checking",
+    "AccountNumber": "****3421"
+  },
+  "PersonalInformation": {
+    "FullName": "John A. Smith",
+    "Email": "john.smith@example.com",
+    "DateOfBirth": "1985-06-15"
+  }
+}
