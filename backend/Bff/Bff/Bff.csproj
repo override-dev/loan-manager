@@ -12,6 +12,7 @@
     <PackageReference Include="FastEndpoints" Version="5.35.0" />
     <PackageReference Include="FastEndpoints.Swagger" Version="5.35.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.4" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="NSwag.AspNetCore" Version="14.3.0" />
     <PackageReference Include="Scalar.AspNetCore" Version="2.1.16" />
   </ItemGroup>

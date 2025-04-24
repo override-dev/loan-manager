@@ -3,6 +3,7 @@ using Azure.Messaging.ServiceBus;
 using Loan.Shared.Contracts.Models;
 using Loan.Shared.Contracts.Constants;
 using Bff.Interfaces.Interfaces;
+using Newtonsoft.Json;
 
 namespace Bff.Services;
 
@@ -73,7 +74,7 @@ internal sealed class LoanNotificationConsumer(
         try
         {
             var body = args.Message.Body.ToString();
-            var envelope = JsonSerializer.Deserialize<MessageEnvelope>(body);
+            var envelope = JsonConvert.DeserializeObject<MessageEnvelope>(body);
 
             if (envelope is null)
             {
