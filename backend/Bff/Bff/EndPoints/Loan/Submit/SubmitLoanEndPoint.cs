@@ -7,7 +7,7 @@ namespace Bff.EndPoints.Loan.Submit;
 
 
 //TODO: apply outbox pattern 
-internal class SubmitLoanEndPoint(ILoanDraftStorageProvider storageProvider, ILoanPublisher loanPublisher):Endpoint<SubmitLoanRequest, SubmitLoanResponse>
+internal class SubmitLoanEndPoint(ILoanDraftStorageProvider draftStorageProvider, ILoanPublisher loanPublisher):Endpoint<SubmitLoanRequest, SubmitLoanResponse>
 {
     public override void Configure()
     {
@@ -24,7 +24,7 @@ internal class SubmitLoanEndPoint(ILoanDraftStorageProvider storageProvider, ILo
     public override async Task HandleAsync(SubmitLoanRequest req, CancellationToken ct)
     {
         //1.- Create the loan entity
-        var loanEntity = new LoanEntity
+        var draft = new LoanEntity
         {
             LoanId = Guid.NewGuid().ToString(),
             LoanAmount = req.LoanAmount,
@@ -42,15 +42,15 @@ internal class SubmitLoanEndPoint(ILoanDraftStorageProvider storageProvider, ILo
 
         //2.- Save the loan entity to the storage provider
 
-        var loanCreationResult = await storageProvider.CreateLoanAsync(loanEntity);
+        var draftCreationResult = await draftStorageProvider.CreateLoanAsync(draft);
 
 
         //3.- Publish the loan creation event to the message broker
-        var loanCreationRequest = new LoanSubmissionRequested(loanCreationResult.LoanId);
+        var draftCreationRequest = new LoanSubmissionRequested(draftCreationResult.LoanId);
 
-        await loanPublisher.PublishLoanSubmittedAsync(loanCreationRequest, ct);
+        await loanPublisher.PublishLoanSubmittedAsync(draftCreationRequest, ct);
 
         //4.- Return the loan ID to the client
-        await SendOkAsync(new SubmitLoanResponse(loanCreationResult.LoanId), cancellation: ct);
+        await SendOkAsync(new SubmitLoanResponse(draftCreationResult.LoanId), cancellation: ct);
     }
 }

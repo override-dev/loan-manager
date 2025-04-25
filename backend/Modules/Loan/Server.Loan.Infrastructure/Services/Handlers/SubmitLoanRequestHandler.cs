@@ -2,6 +2,7 @@
 using FastEndpoints;
 using Loan.Shared.Contracts.Requests;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Server.Loan.Application.Features.Loan.CreateLoan;
 using Server.Loan.Application.Interfaces;
 using Server.Loan.Contracts.Features.Loan.SubmitLoan;
@@ -16,7 +17,7 @@ internal class SubmitLoanRequestHandler(ILogger<SubmitLoanRequestHandler> logger
 {
     public async Task HandleAsync(string messageContent, CancellationToken cancellationToken)
     {
-        var draftLoanSubmission = JsonSerializer.Deserialize<LoanSubmissionRequested>(messageContent);
+        var draftLoanSubmission = JsonConvert.DeserializeObject<LoanSubmissionRequested>(messageContent);
 
         if (draftLoanSubmission is null)
         {
@@ -27,15 +28,15 @@ internal class SubmitLoanRequestHandler(ILogger<SubmitLoanRequestHandler> logger
         logger.LogInformation("Processing loan submission request for ID {LoanId}", draftLoanSubmission.LoanId);
 
         var loanDraftsRepository = loanRepositoryFactory.Create(Enums.StorageType.Draft);
-        var loanEntity = await loanDraftsRepository.GetLoanByIdAsync(draftLoanSubmission.LoanId);
+        var draft = await loanDraftsRepository.GetLoanByIdAsync(draftLoanSubmission.LoanId);
 
-        if (loanEntity is null)
+        if (draft is null)
         {
             logger.LogError("Loan with ID {LoanId} not found", draftLoanSubmission.LoanId);
             return;
         }
 
-        var createCommand = new CreateLoanCommand(loanEntity.LoanId);
+        var createCommand = new CreateLoanCommand(draft.LoanId);
         var createLoanResult = await createCommand.ExecuteAsync(cancellationToken);
 
         if(!createLoanResult.IsSuccess)

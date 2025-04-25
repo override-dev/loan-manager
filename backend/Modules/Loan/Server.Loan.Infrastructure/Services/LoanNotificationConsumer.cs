@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Loan.Shared.Contracts.Models;
 using Server.Loan.Application.Interfaces;
 using Loan.Shared.Contracts.Constants;
+using Newtonsoft.Json;
 
 namespace Server.Loan.Infrastructure.Services;
 
@@ -76,7 +77,7 @@ internal sealed class LoanNotificationConsumer(
         try
         {
             var body = args.Message.Body.ToString();
-            var envelope = JsonSerializer.Deserialize<MessageEnvelope>(body);
+            var envelope = JsonConvert.DeserializeObject<MessageEnvelope>(body);
 
             if (envelope is null)
             {

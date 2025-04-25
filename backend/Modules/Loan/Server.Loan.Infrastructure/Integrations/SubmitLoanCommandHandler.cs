@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using Ardalis.Result;
 using FastEndpoints;
+using Newtonsoft.Json;
 using Server.Loan.Contracts.Features.Loan.Notifications;
 using Server.Loan.Contracts.Features.Loan.SubmitLoan;
 using Server.Loan.Domain.Aggregates.Loan.Enums;
@@ -85,7 +86,7 @@ internal class SubmitLoanCommandHandler(ILoanRepositoryFactory loanRepositoryFac
         // STEP 6: Publish domain events
         foreach (var @event in loan.DomainEvents)
         {
-            var eventNotification = new LoanNotification(JsonSerializer.Serialize(@event));
+            var eventNotification = new LoanNotification(JsonConvert.SerializeObject(@event));
             await eventNotification.PublishAsync(cancellation: ct);
         }
 

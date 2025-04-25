@@ -1,5 +1,6 @@
 ﻿using Loan.StorageProvider.Interfaces;
 using Loan.StorageProvider.Models;
+using Newtonsoft.Json;
 using StackExchange.Redis;
 using System.Text.Json;
 
@@ -23,7 +24,7 @@ internal class RedisStorageProvider(IConnectionMultiplexer connectionMux) : ISto
         loan.LoanStatus = 0;
 
         // Serialize the loan object
-        var loanJson = JsonSerializer.Serialize(loan);
+        var loanJson = JsonConvert.SerializeObject(loan);
 
         // Store the loan in Redis
         var loanKey = LOAN_KEY_PREFIX + loan.LoanId;
@@ -74,7 +75,7 @@ internal class RedisStorageProvider(IConnectionMultiplexer connectionMux) : ISto
         }
 
         // Deserialize and return the loan
-        return JsonSerializer.Deserialize<LoanEntity>(loanJson.ToString());
+        return JsonConvert.DeserializeObject<LoanEntity>(loanJson.ToString());
     }
 
     public async Task<bool> SubmitLoanAsync(string loanId) => await UpdateLoanStatusAsync(loanId, 1);
@@ -92,7 +93,7 @@ internal class RedisStorageProvider(IConnectionMultiplexer connectionMux) : ISto
         loan.LoanStatus = newStatus;
 
         // Serialize the updated loan
-        var loanJson = JsonSerializer.Serialize(loan);
+        var loanJson = JsonConvert.SerializeObject(loan);
 
         // Store the updated loan back in Redis
         string loanKey = LOAN_KEY_PREFIX + loanId;
