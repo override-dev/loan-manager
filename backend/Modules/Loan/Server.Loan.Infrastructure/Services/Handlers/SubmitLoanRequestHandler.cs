@@ -1,5 +1,5 @@
-﻿using System.Text.Json;
-using FastEndpoints;
+﻿using FastEndpoints;
+using Loan.Shared.Contract.Abstractions.Interfaces;
 using Loan.Shared.Contracts.Requests;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -13,10 +13,15 @@ namespace Server.Loan.Infrastructure.Services.Handlers;
 /// <summary>
 /// Handler for loan submission requests
 /// </summary>
-internal class SubmitLoanRequestHandler(ILogger<SubmitLoanRequestHandler> logger, ILoanRepositoryFactory loanRepositoryFactory) : IMessageHandler
+internal class SubmitLoanRequestHandler(
+    ILogger<SubmitLoanRequestHandler> logger, 
+    ILoanRepositoryFactory loanRepositoryFactory,
+    ISchemaValidator schemaValidator
+    ) : IMessageHandler
 {
     public async Task HandleAsync(string messageContent, CancellationToken cancellationToken)
     {
+       
         var draftLoanSubmission = JsonConvert.DeserializeObject<LoanSubmissionRequested>(messageContent);
 
         if (draftLoanSubmission is null)
@@ -24,6 +29,15 @@ internal class SubmitLoanRequestHandler(ILogger<SubmitLoanRequestHandler> logger
             logger.LogError("Failed to deserialize SubmitLoanRequest");
             return;
         }
+
+        var validationResult = await schemaValidator.ValidateAsync(draftLoanSubmission);
+
+        if(!validationResult)
+        {
+            logger.LogError("Validation failed for loan submission request");
+            return;
+        }
+
 
         logger.LogInformation("Processing loan submission request for ID {LoanId}", draftLoanSubmission.LoanId);
 

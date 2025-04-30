@@ -1,4 +1,4 @@
-﻿using Loan.StorageProvider;
+﻿using Loan.Shared.Contracts.DataAnnotation.Validators;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Server.Loan.Infrastructure.Interfaces;
@@ -18,6 +18,7 @@ internal static class ServiceExtensions
         services.AddHostedService<LoanNotificationConsumer>();
         services.AddTransient<SubmitLoanRequestHandler>();
         services.AddTransient<IStartupFilter, MessageHandlerRegistrationStartupFilter>();
+        services.AddSchemaValidators();
         return services;
     }
 }
