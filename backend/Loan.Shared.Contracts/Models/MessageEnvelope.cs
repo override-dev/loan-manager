@@ -1,3 +1,5 @@
-﻿namespace Loan.Shared.Contracts.Models;
+﻿using System.ComponentModel.DataAnnotations;
 
-public record MessageEnvelope(string MessageType, string MessageContent);
+namespace Loan.Shared.Contracts.Models;
+
+public record MessageEnvelope([Required(AllowEmptyStrings = false)] string MessageType, [Required(AllowEmptyStrings = false)] string MessageContent);

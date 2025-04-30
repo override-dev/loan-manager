@@ -15,6 +15,8 @@
    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
  </ItemGroup>
  <ItemGroup>
+   <ProjectReference Include="..\..\..\Loan.Shared.Contract.Schema\Loan.Shared.Contract.Abstractions.csproj" />
+   <ProjectReference Include="..\..\..\Loan.Shared.Contracts.DataAnnotation.Validators\Loan.Shared.Contracts.DataAnnotation.Validators.csproj" />
    <ProjectReference Include="..\..\..\Loan.Shared.Contracts\Loan.Shared.Contracts.csproj" />
    <ProjectReference Include="..\..\..\Shared\Loan.StorageProvider.Models\Loan.StorageProvider.Models.csproj" />
    <ProjectReference Include="..\..\..\Shared\Loan.StorageProvider\Loan.StorageProvider.csproj" />
