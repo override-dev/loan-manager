@@ -1,5 +1,5 @@
 import { BehaviorSubject, combineLatest, Observable } from "rxjs";
-import { map, debounceTime } from "rxjs/operators";
+import { map, debounceTime, distinctUntilChanged } from "rxjs/operators";
 import type { IStepViewModel } from "~/interfaces/IStepViewModel";
 import type { IValidationError } from "~/interfaces/IValidationError";
 import { BankInformation } from "~/models/bankInformation";
@@ -13,56 +13,101 @@ import type { ISpecification } from "~/specifications/ISpecification";
 export class BankInformationViewModel implements IStepViewModel<BankInformation> {
   private model: BankInformation;
   private _errors: BehaviorSubject<IValidationError[]>;
-  private formSpecification: ISpecification<BankInformation>;
-
+  
+  // Map all the specifications
+  private propertySpecs: Map<string, ISpecification<BankInformation>[]>;
+  
   public data$: Observable<BankInformation>;
   public errors$: Observable<IValidationError[]>;
   public isValid$: Observable<boolean>;
-  
+
   constructor() {
     this.model = new BankInformation();
     this._errors = new BehaviorSubject<IValidationError[]>([]);
 
-    // Create individual specifications
-    const bankNameSpec = new BankNameSpecification();
-    const accountTypeSpec = new AccountTypeSpecification();
-    const accountNumberSpec = new AccountNumberSpecification();
-    const accountNumberFormatSpec = new AccountNumberFormatByTypeSpecification();
+    this.propertySpecs = new Map([
+      ['bankName', [new BankNameSpecification()]],
+      ['accountType', [new AccountTypeSpecification()]],
+      ['accountNumber', [
+        new AccountNumberSpecification(),
+        new AccountNumberFormatByTypeSpecification()
+      ]]
+    ]);
 
-    // Combine specifications for the whole form
-    this.formSpecification = bankNameSpec
-      .and(accountTypeSpec)
-      .and(accountNumberSpec)
-      .and(accountNumberFormatSpec);
-
-    // Set up data observable
     this.data$ = combineLatest([
       this.model.bankName$,
       this.model.accountType$,
       this.model.accountNumber$,
     ]).pipe(
       map(([bankName, accountType, accountNumber]) => {
-        return new BankInformation({ bankName, accountType, accountNumber });
-      })
+        const newData = new BankInformation();
+        if (bankName) newData.setBankName(bankName);
+        if (accountType) newData.setAccountType(accountType);
+        if (accountNumber) newData.setAccountNumber(accountNumber);
+        return newData;
+      }),
+      distinctUntilChanged((prev, curr) =>
+        prev.bankName === curr.bankName &&
+        prev.accountType === curr.accountType &&
+        prev.accountNumber === curr.accountNumber
+      )
     );
 
-    // Set up errors observable
+    // we set the viewModel isValid = true by default
     this.errors$ = this._errors.asObservable();
-
-    // Set up validity observable
     this.isValid$ = this.errors$.pipe(
       map(errors => errors.length === 0)
     );
 
-    // Set up automatic validation when data changes
-    this.data$.pipe(
-      debounceTime(300) // Wait 300ms after the last change before validating
-    ).subscribe(() => {
-      this.validate();
+    this.model.propertyChanged$.pipe(
+      debounceTime(300),
+      distinctUntilChanged((prev, curr) => 
+        prev.propertyName === curr.propertyName && prev.newValue === curr.newValue
+      )
+    ).subscribe(change => {
+      // validate the property when there is a change
+      this.validateProperty(change.propertyName);
+    });
+  }
+
+  private validateProperty(propertyName: string): void {
+    const currentErrors = this._errors.value;
+    const errorsWithoutCurrentProperty = currentErrors.filter(error => error.field !== propertyName);
+    
+    const specs = this.propertySpecs.get(propertyName) || [];
+    const newErrors: IValidationError[] = [];
+    
+    specs.forEach(spec => {
+      const result = spec.check(this.model);
+      newErrors.push(...result.errors.map(error => ({
+        field: error.field,
+        message: error.message
+      })));
     });
     
-    // Run initial validation
-    this.validate();
+    const updatedErrors = [...errorsWithoutCurrentProperty, ...newErrors];
+    this._errors.next(updatedErrors);
+  }
+
+  
+  validate(): void {
+    this.validateAll();
+  }
+
+  private validateAll(): void {
+    const allErrors: IValidationError[] = [];
+    
+    this.propertySpecs.forEach((specs, propertyName) => {
+      specs.forEach(spec => {
+        const result = spec.check(this.model);
+        allErrors.push(...result.errors.map(error => ({
+          field: error.field,
+          message: error.message
+        })));
+      });
+    });
+    
+    this._errors.next(allErrors);
   }
 
   updateData(data: Partial<BankInformation>): void {
@@ -83,17 +128,12 @@ export class BankInformationViewModel implements IStepViewModel<BankInformation>
     this.model.setAccountNumber(accountNumber);
   }
 
-  validate(): void {
-    // Use the check method from the combined specification
-    const validationResult = this.formSpecification.check(this.model);
-    
-    // Map validation errors to the expected format
-    const errors: IValidationError[] = validationResult.errors.map(error => ({
-      field: error.field,
-      message: error.message
-    }));
-    
-    // Update the errors subject
-    this._errors.next(errors);
+  getCurrentData(): BankInformation {
+    return this.model;
+  }
+
+  destroy(): void {
+    this.model.destroy();
+    this._errors.complete();
   }
 }

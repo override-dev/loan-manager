@@ -22,10 +22,7 @@ const BankInformationView: FC<BankInformationViewProps> = ({ viewModel }) => {
       setErrors(validationErrors);
     });
 
-    // Force an initial validation
-    if (typeof viewModel.validate === 'function') {
-      viewModel.validate();
-    }
+  
 
     return () => {
       dataSubscription.unsubscribe();

@@ -1,4 +1,5 @@
-import { BehaviorSubject } from "rxjs";
+import { BehaviorSubject, Observable, Subject } from "rxjs";
+import type { PropertyChangedEventArgs } from "~/interfaces/INotifyPropertyChanged";
 
 export class BankInformation {
   private bankNameSubject = new BehaviorSubject<string>("");
@@ -15,16 +16,18 @@ export class BankInformation {
     if (data?.accountNumber) this.accountNumberSubject.next(data.accountNumber);
   }
 
+
+
   setBankName(bankName: string): void {
-    this.bankNameSubject.next(bankName);
+    this.setProperty(this.bankNameSubject, 'bankName', bankName);
   }
 
   setAccountType(accountType: string): void {
-    this.accountTypeSubject.next(accountType);
+    this.setProperty(this.accountTypeSubject, 'accountType', accountType);
   }
 
   setAccountNumber(accountNumber: string): void {
-    this.accountNumberSubject.next(accountNumber);
+    this.setProperty(this.accountNumberSubject, 'accountNumber', accountNumber);
   }
 
   get bankName(): string {
@@ -37,5 +40,28 @@ export class BankInformation {
 
   get accountNumber(): string {
     return this.accountNumberSubject.value;
+  }
+
+  // this can be moved to an abstract class 
+  private _propertyChanged = new Subject<PropertyChangedEventArgs>();
+
+  get propertyChanged$(): Observable<PropertyChangedEventArgs> {
+    return this._propertyChanged.asObservable();
+  }
+
+  protected notifyPropertyChanged(propertyName: string, oldValue: any, newValue: any): void {
+    this._propertyChanged.next({ propertyName, oldValue, newValue });
+  }
+
+  destroy(): void {
+    this._propertyChanged.complete();
+  }
+
+  private setProperty<T>(subject: BehaviorSubject<T>, propertyName: string, value: T): void {
+    const oldValue = subject.value;
+    if (oldValue === value) return;
+
+    subject.next(value);
+    this.notifyPropertyChanged(propertyName, oldValue, value);
   }
 }
